@@ -4,8 +4,13 @@ import Input from "../../../components/inputs/Input";
 import Button from "../../../components/buttons/Button";
 import Text from "../../../components/typography/Text";
 import { colors } from "../../../constants/colors";
-import { login, register } from "../../../services/firebase/authServices";
+import {
+  login,
+  register,
+  loginWithGoogle,
+} from "../../../services/firebase/authServices";
 import { addNewUser } from "../../../services/firebase/users";
+import { useNavigate } from "react-router-dom";
 
 function AuthCard() {
   const [isRegister, setIsRegister] = useState(false);
@@ -14,6 +19,7 @@ function AuthCard() {
     password: "",
     confirmPassword: "",
   });
+  const navigate = useNavigate();
 
   return (
     <Card>
@@ -28,17 +34,14 @@ function AuthCard() {
         <Text size={28} weight={700}>
           {isRegister ? "Create account" : "Welcome back"}
         </Text>
-
         <Text color={colors.textSecondary}>
           {isRegister ? "Register to continue" : "Sign in to your account"}
         </Text>
-
         <Input
           placeholder='Email'
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         />
-
         <Input
           placeholder='Password'
           type='password'
@@ -47,7 +50,6 @@ function AuthCard() {
             setFormData({ ...formData, password: e.target.value })
           }
         />
-
         {isRegister && (
           <Input
             placeholder='Confirm password'
@@ -58,27 +60,33 @@ function AuthCard() {
             }
           />
         )}
-
         <Button
           onClick={async () => {
-            if (isRegister) {
-              const newUser = await register(formData.email, formData.password);
-              console.log("New user created:", newUser);
-              await addNewUser({
-                uid: newUser.user.uid,
-                email: newUser.user.email,
-                displayName: newUser.user.displayName,
-                photoURL: newUser.user.photoURL,
-              });
-            } else {
-              const user = await login(formData.email, formData.password);
-              console.log("User logged in:", user);
+            try {
+              if (isRegister) {
+                const newUser = await register(
+                  formData.email,
+                  formData.password,
+                );
+                console.log("New user created:", newUser);
+                await addNewUser({
+                  uid: newUser.user.uid,
+                  email: newUser.user.email,
+                  displayName: newUser.user.displayName,
+                  photoURL: newUser.user.photoURL,
+                });
+              } else {
+                const user = await login(formData.email, formData.password);
+                console.log("User logged in:", user);
+              }
+              navigate("/dashboard");
+            } catch (error) {
+              console.error("Authentication error:", error);
             }
           }}
         >
           {isRegister ? "Register" : "Login"}
         </Button>
-
         <button
           style={{
             border: "none",
@@ -91,6 +99,27 @@ function AuthCard() {
         >
           {isRegister ? "Already have an account?" : "Create account"}
         </button>
+        <Text color={colors.textSecondary}>Or sign in with Google</Text>
+        <Button
+          onClick={async () => {
+            try {
+              const user = await loginWithGoogle();
+              console.log("User logged in with Google:", user);
+              await addNewUser({
+                uid: user.user.uid,
+                email: user.user.email,
+                displayName: user.user.displayName,
+                photoURL: user.user.photoURL,
+              });
+
+              navigate("/dashboard");
+            } catch (error) {
+              console.error("Authentication error:", error);
+            }
+          }}
+        >
+          Sign in with Google
+        </Button>
       </div>
     </Card>
   );

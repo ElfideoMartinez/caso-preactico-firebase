@@ -21,3 +21,4 @@ setGlobalOptions({ maxInstances: 10 });
 // 2. Export your functions down here so they can safely import 'db'
 export { addNewProduct } from "./features/products/addNewProduct";
 export { getProducts } from "./features/products/getProducts";
+export { addNewUser } from "./features/users/addNewUser";
