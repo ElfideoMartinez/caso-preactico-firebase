@@ -5,6 +5,7 @@ import Button from "../../../components/buttons/Button";
 import Text from "../../../components/typography/Text";
 import { colors } from "../../../constants/colors";
 import { login, register } from "../../../services/firebase/authServices";
+import { addNewUser } from "../../../services/firebase/users";
 
 function AuthCard() {
   const [isRegister, setIsRegister] = useState(false);
@@ -59,11 +60,19 @@ function AuthCard() {
         )}
 
         <Button
-          onClick={() => {
+          onClick={async () => {
             if (isRegister) {
-              register(formData.email, formData.password);
+              const newUser = await register(formData.email, formData.password);
+              console.log("New user created:", newUser);
+              await addNewUser({
+                uid: newUser.user.uid,
+                email: newUser.user.email,
+                displayName: newUser.user.displayName,
+                photoURL: newUser.user.photoURL,
+              });
             } else {
-              login(formData.email, formData.password);
+              const user = await login(formData.email, formData.password);
+              console.log("User logged in:", user);
             }
           }}
         >
