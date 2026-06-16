@@ -1,8 +1,9 @@
 import { useState } from "react";
 import Header from "../components/header/Header";
 import Sidebar from "../components/sidebar/Sidebar";
+import { Outlet } from "react-router-dom";
 
-function MainLayout({ children }: { children?: React.ReactNode }) {
+function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
@@ -23,7 +24,7 @@ function MainLayout({ children }: { children?: React.ReactNode }) {
             padding: 32,
           }}
         >
-          {children}
+          <Outlet />
         </main>
       </div>
     </>

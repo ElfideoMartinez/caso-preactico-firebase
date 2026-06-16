@@ -19,3 +19,19 @@ export const addNewUser = async (user: User) => {
 
   return result.data;
 };
+// get users orders and products in cart
+export const getUserData = async (uid: string) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}getUserData`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ uid }),
+    },
+  );
+  const result = await response.json();
+
+  return result.data;
+};

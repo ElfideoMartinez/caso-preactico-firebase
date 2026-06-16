@@ -9,3 +9,19 @@ body {
   color: #1e293b;
   font-family: Inter, system-ui, sans-serif;
 }
+.burger {
+  border: none;
+  background-color: transparent;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  @media (max-width: 1024px) {
+    display: flex;
+  }
+}
+.burger span {
+  width: 48px;
+  height: 48px;
+  background: var(--text);
+  border-radius: 1px;
+}

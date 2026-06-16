@@ -25,14 +25,16 @@ function Header({ onToggleSidebar }: HeaderProps) {
           gap: 16,
         }}
       >
-        <button onClick={onToggleSidebar}>☰</button>
+        <button className='burger' onClick={onToggleSidebar}>
+          <span>☰</span>
+        </button>
 
         <h2
           style={{
             color: colors.secondary,
           }}
         >
-          My App
+          Innovate Solutions
         </h2>
       </div>
 

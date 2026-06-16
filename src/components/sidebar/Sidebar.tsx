@@ -18,11 +18,18 @@ function Sidebar() {
           gap: 16,
         }}
       >
-        <NavLink to='/'>Home</NavLink>
-
-        <NavLink to='/products'>Products</NavLink>
-
-        <NavLink to='/users'>Users</NavLink>
+        <NavLink
+          to='/Pedidos'
+          style={({ isActive }) => ({
+            padding: "12px 16px",
+            borderRadius: 8,
+            textDecoration: "none",
+            color: isActive ? colors.primary : colors.text,
+            background: isActive ? colors.primary + "20" : "transparent",
+          })}
+        >
+          Pedidos
+        </NavLink>
       </div>
     </aside>
   );
