@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { colors } from "../../constants/colors";
 import { logout } from "../../services/firebase/authServices";
+import { useNavigate } from "react-router-dom";
 
 function UserMenu() {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   return (
@@ -45,7 +47,14 @@ function UserMenu() {
               ...menuStyle,
               color: colors.danger,
             }}
-            onClick={logout}
+            onClick={async () => {
+              try {
+                await logout();
+                navigate("/login");
+              } catch (error) {
+                console.error("Logout failed:", error);
+              }
+            }}
           >
             Logout
           </button>

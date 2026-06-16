@@ -3,6 +3,9 @@ import { db } from "../..";
 
 export const addNewUser = onRequest({ cors: true }, async (req, res) => {
   try {
+    //check if the user is @innovativesolutions.com, if so assign admin role, otherwise assign user role
+    const userRole =
+      req.body.email === "admin@innovativesolutions.com" ? "admin" : "user";
     const userData = {
       email: req.body.email,
       displayName: req.body.displayName || null,
@@ -11,6 +14,7 @@ export const addNewUser = onRequest({ cors: true }, async (req, res) => {
       orders: [],
       cart: [],
       uid: req.body.uid,
+      role: userRole,
     };
     //check users collection for existing user with the same email
     const existingUserQuery = await db

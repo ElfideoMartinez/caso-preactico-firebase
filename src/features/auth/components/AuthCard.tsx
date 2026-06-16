@@ -18,6 +18,7 @@ function AuthCard() {
     email: "",
     password: "",
     confirmPassword: "",
+    displayName: "",
   });
   const navigate = useNavigate();
 
@@ -37,6 +38,15 @@ function AuthCard() {
         <Text color={colors.textSecondary}>
           {isRegister ? "Register to continue" : "Sign in to your account"}
         </Text>
+        {isRegister && (
+          <Input
+            placeholder='Display name'
+            value={formData.displayName}
+            onChange={(e) =>
+              setFormData({ ...formData, displayName: e.target.value })
+            }
+          />
+        )}
         <Input
           placeholder='Email'
           value={formData.email}
