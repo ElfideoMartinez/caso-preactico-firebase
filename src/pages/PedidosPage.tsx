@@ -4,6 +4,7 @@ import { getUserData } from "../services/firebase/users";
 import { useAuth } from "../contexts/AuthContext";
 import OrdersBody from "../components/orders/OrdersBody";
 import { spacing } from "../constants/spacing";
+import Text from "../components/typography/Text";
 
 const PedidosPage = () => {
   const { user, loading } = useAuth();
@@ -31,7 +32,7 @@ const PedidosPage = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Text>Loading...</Text>;
   }
 
   return (

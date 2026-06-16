@@ -4,6 +4,8 @@ import LoginPage from "../features/auth/pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
 import MainLayout from "../layouts/MainLayout";
 import PedidosPage from "../pages/PedidosPage";
+import ProtectedRoute from "../components/routes/ProtectedRoutes";
+import Users from "../pages/Users";
 
 export default function AppRoutes() {
   return (
@@ -11,8 +13,30 @@ export default function AppRoutes() {
       <Routes>
         <Route path='/login' element={<LoginPage />} />
         <Route element={<MainLayout />}>
-          <Route path='/dashboard' element={<DashboardPage />} />
-          <Route path='/pedidos' element={<PedidosPage />} />
+          <Route
+            path='/dashboard'
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/pedidos'
+            element={
+              <ProtectedRoute>
+                <PedidosPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/users'
+            element={
+              <ProtectedRoute>
+                <Users />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>

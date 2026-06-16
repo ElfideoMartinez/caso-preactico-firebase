@@ -23,3 +23,4 @@ export { addNewProduct } from "./features/products/addNewProduct";
 export { getProducts } from "./features/products/getProducts";
 export { addNewUser } from "./features/users/addNewUser";
 export { getUserData } from "./features/users/getUserData";
+export { getAllUsers } from "./features/users/getAllUsers";

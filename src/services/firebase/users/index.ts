@@ -35,3 +35,17 @@ export const getUserData = async (uid: string) => {
 
   return result.data;
 };
+export const getAllUsers = async () => {
+  const response = await fetch(
+    `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}getAllUsers`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  const result = await response.json();
+
+  return result.data;
+};

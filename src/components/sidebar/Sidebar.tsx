@@ -19,7 +19,7 @@ function Sidebar() {
         }}
       >
         <NavLink
-          to='/Pedidos'
+          to='/pedidos'
           style={({ isActive }) => ({
             padding: "12px 16px",
             borderRadius: 8,
@@ -29,6 +29,18 @@ function Sidebar() {
           })}
         >
           Pedidos
+        </NavLink>
+        <NavLink
+          to='/users'
+          style={({ isActive }) => ({
+            padding: "12px 16px",
+            borderRadius: 8,
+            textDecoration: "none",
+            color: isActive ? colors.primary : colors.text,
+            background: isActive ? colors.primary + "20" : "transparent",
+          })}
+        >
+          Users
         </NavLink>
       </div>
     </aside>
