@@ -5,6 +5,7 @@ type TextProps = {
   size?: number;
   weight?: number;
   color?: string;
+  style?: React.CSSProperties;
 };
 
 function Text({
@@ -12,6 +13,7 @@ function Text({
   size = 16,
   weight = 400,
   color = colors.text,
+  style = {},
 }: TextProps) {
   return (
     <span
@@ -19,6 +21,7 @@ function Text({
         color,
         fontSize: size,
         fontWeight: weight,
+        ...style,
       }}
     >
       {children}

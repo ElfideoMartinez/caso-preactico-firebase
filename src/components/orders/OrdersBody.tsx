@@ -2,17 +2,17 @@ import Card from "../cards/Card";
 import OrderCard from "./OrderCard";
 
 interface OrdersBodyProps {
-  cart: any[];
+  orders: any[];
 }
 
-const OrdersBody = ({ cart }: OrdersBodyProps) => {
+const OrdersBody = ({ orders }: OrdersBodyProps) => {
   return (
     <Card>
-      {cart.length === 0 ? (
+      {orders.length === 0 ? (
         <p>No hay órdenes.</p>
       ) : (
         <ul>
-          {cart.map((item, index) => (
+          {orders.map((item, index) => (
             <OrderCard key={index}>
               <p>Producto: {item.productName}</p>
               <p>Cantidad: {item.quantity}</p>

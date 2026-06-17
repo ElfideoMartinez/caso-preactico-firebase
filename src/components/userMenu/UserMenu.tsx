@@ -110,7 +110,7 @@ function UserMenu() {
           </div>
           <Button
             onClick={() => {
-              navigate("/checkout");
+              navigate("/checkout", { state: { cart: userCart } });
               setOpen("");
             }}
           >

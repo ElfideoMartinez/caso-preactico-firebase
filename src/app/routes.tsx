@@ -8,6 +8,7 @@ import ProtectedRoute from "../components/routes/ProtectedRoutes";
 import Users from "../pages/Users";
 import Products from "../pages/Products";
 import Inventory from "../pages/Inventory";
+import Checkout from "../pages/Checkout";
 
 export default function AppRoutes() {
   return (
@@ -44,6 +45,14 @@ export default function AppRoutes() {
             element={
               <ProtectedRoute>
                 <Inventory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/checkout'
+            element={
+              <ProtectedRoute>
+                <Checkout />
               </ProtectedRoute>
             }
           />

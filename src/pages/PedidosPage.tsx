@@ -45,7 +45,7 @@ const PedidosPage = () => {
       }}
     >
       <OrdersHeader user={userData} />
-      <OrdersBody cart={userData?.orders || []} />
+      <OrdersBody orders={userData?.orders || []} />
     </div>
   );
 };

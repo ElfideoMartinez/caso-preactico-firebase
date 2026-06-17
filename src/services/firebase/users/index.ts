@@ -52,7 +52,7 @@ export const getAllUsers = async () => {
 };
 export const getUserCart = async (uid: string) => {
   const response = await fetch(
-    `http://127.0.0.1:5001/caso-practico-9de94/us-central1/getUserCart?uid=${uid}`,
+    `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}getUserCart?uid=${uid}`,
     {
       method: "GET",
       headers: {
@@ -73,7 +73,7 @@ export const addToCart = async (
   try {
     console.log("Adding to cart:", { uid, productId, name, sellingPrice });
     const response = await fetch(
-      `http://127.0.0.1:5001/caso-practico-9de94/us-central1/addToCart`,
+      `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}addToCart`,
       {
         method: "POST",
         headers: {
@@ -94,3 +94,4 @@ export const addToCart = async (
     throw error;
   }
 };
+export { addNewOrder } from "./addNewOrder";
