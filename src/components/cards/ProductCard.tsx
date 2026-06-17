@@ -166,7 +166,7 @@ function ProductCard({
           onClick={async () => {
             //add cart object to user in firebase
             try {
-              await addToCart(user?.uid || "", id);
+              await addToCart(user?.uid || "", id, name, salePrice || price);
               alert("Product added to cart!");
             } catch (error) {
               console.error("Error adding product to cart:", error);

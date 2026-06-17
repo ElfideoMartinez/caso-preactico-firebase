@@ -3,17 +3,23 @@ import { db } from "../..";
 
 export const addToCart = onRequest({ cors: true }, async (req, res) => {
   try {
-    //we get user and product id from the request body
-    const { uid, productId } = req.body;
+    const { uid, productId, quantity = 1, name, sellingPrice } = req.body;
+    console.log("Received addToCart request with:", {
+      uid,
+      productId,
+      quantity,
+      name,
+      sellingPrice,
+    });
 
     if (!uid || !productId) {
-      res.status(403).json({
+      res.status(400).json({
         success: false,
-        error: "Missing uid or productId in request body",
+        error: "Missing uid or productId",
       });
       return;
     }
-    //new cart = old cart + new product id
+
     const userRef = db.collection("users").doc(uid);
     const userDoc = await userRef.get();
 
@@ -26,18 +32,32 @@ export const addToCart = onRequest({ cors: true }, async (req, res) => {
     }
 
     const userData = userDoc.data();
-    const currentCart = userData?.cart || [];
-    const updatedCart = [...currentCart, productId];
+    const cart = userData?.cart || [];
 
-    await userRef.update({ cart: updatedCart });
+    const existingIndex = cart.findIndex((item: any) => item.id === productId);
+
+    if (existingIndex >= 0) {
+      cart[existingIndex].quantity += quantity;
+    } else {
+      cart.push({
+        id: productId,
+        quantity,
+        name,
+        sellingPrice,
+      });
+    }
+
+    await userRef.update({
+      cart,
+    });
 
     res.status(200).json({
       success: true,
-      message: "Product added to cart successfully",
-      data: updatedCart,
+      data: cart,
     });
   } catch (error) {
-    console.error("Error adding product to cart:", error);
+    console.error(error);
+
     res.status(500).json({
       success: false,
       error: "Internal Server Error",

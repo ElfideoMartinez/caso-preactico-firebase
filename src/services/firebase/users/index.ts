@@ -50,17 +50,36 @@ export const getAllUsers = async () => {
 
   return result.data;
 };
-export const addToCart = async (uid: string, productId: string) => {
+export const getUserCart = async (uid: string) => {
+  const response = await fetch(
+    `http://127.0.0.1:5001/caso-practico-9de94/us-central1/getUserCart?uid=${uid}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  const result = await response.json();
+
+  return result.data;
+};
+export const addToCart = async (
+  uid: string,
+  productId: string,
+  name: string,
+  sellingPrice: number,
+) => {
   try {
-    console.log("Adding to cart:", { uid, productId });
+    console.log("Adding to cart:", { uid, productId, name, sellingPrice });
     const response = await fetch(
-      `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}addToCart`,
+      `http://127.0.0.1:5001/caso-practico-9de94/us-central1/addToCart`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ uid, productId }),
+        body: JSON.stringify({ uid, productId, name, sellingPrice }),
       },
     );
     if (!response.ok) {

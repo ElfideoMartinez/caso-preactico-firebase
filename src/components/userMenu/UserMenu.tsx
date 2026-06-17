@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../buttons/Button";
 import CustomModal from "../modals/CustomModal";
 import Text from "../typography/Text";
-import { getUserData } from "../../services/firebase/users";
+import { getUserCart } from "../../services/firebase/users";
 import { useAuth } from "../../contexts/AuthContext";
 
 function UserMenu() {
@@ -18,9 +18,9 @@ function UserMenu() {
     const fetchUserData = async () => {
       if (user) {
         try {
-          const data = await getUserData(user.uid);
+          const data = await getUserCart(user.uid);
           console.log("User data:", data);
-          setUserCart(data.cart || []);
+          setUserCart(data?.products || []);
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
