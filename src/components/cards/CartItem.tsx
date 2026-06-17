@@ -2,6 +2,7 @@ import Text from "../typography/Text";
 import Card from "./Card";
 
 const CartItem = ({ item }: { children?: React.ReactNode; item: any }) => {
+  if (!item) return <Text>Producto no encontrado</Text>;
   return (
     <Card style={{ display: "flex", flexDirection: "column" }}>
       <Text>

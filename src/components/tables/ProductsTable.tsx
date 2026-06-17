@@ -42,7 +42,7 @@ const ProductsTable = ({
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              editProduct(row.id, "name", row.name);
+              await editProduct(row.id, "name", row.name);
             }
           }}
           onChange={(e) => {
@@ -58,6 +58,13 @@ const ProductsTable = ({
         <Input
           type='text'
           value={row.price}
+          onKeyDown={async (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              await editProduct(row.id, "price", row.price);
+              return;
+            }
+          }}
           onChange={(e) => {
             handleInputChangeFunction(e, row, "price", setProducts);
           }}
@@ -71,11 +78,11 @@ const ProductsTable = ({
         <Input
           type='text'
           value={row.stock}
-          onKeyDown={(e) => {
-            console.log("Key down detected:", e.key);
+          onKeyDown={async (e) => {
             if (e.key === "Enter") {
               console.log("Enter key pressed, saving changes...");
               e.preventDefault();
+              await editProduct(row.id, "stock", row.stock);
               return;
             }
           }}
