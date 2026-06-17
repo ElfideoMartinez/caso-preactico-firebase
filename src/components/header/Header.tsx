@@ -37,7 +37,6 @@ function Header({ onToggleSidebar }: HeaderProps) {
           Innovate Solutions
         </h2>
       </div>
-
       <UserMenu />
     </header>
   );

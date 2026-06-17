@@ -1,14 +1,16 @@
 import { colors } from "../../constants/colors";
 
 type ButtonProps = {
+  disabled?: boolean;
   children: React.ReactNode;
   onClick?: () => void;
 };
 
-function Button({ children, onClick }: ButtonProps) {
+function Button({ children, onClick, disabled }: ButtonProps) {
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       style={{
         backgroundColor: colors.primary,
         color: colors.white,

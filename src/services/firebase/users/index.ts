@@ -3,6 +3,7 @@ interface User {
   email: string | null;
   displayName: string | null;
   photoURL: string | null;
+  role?: string;
 }
 export const addNewUser = async (user: User) => {
   const response = await fetch(
@@ -48,4 +49,29 @@ export const getAllUsers = async () => {
   const result = await response.json();
 
   return result.data;
+};
+export const addToCart = async (uid: string, productId: string) => {
+  try {
+    console.log("Adding to cart:", { uid, productId });
+    const response = await fetch(
+      `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}addToCart`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ uid, productId }),
+      },
+    );
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Error adding to cart: ${response.status} ${errorText}`);
+    } else {
+      const result = await response.json();
+      return result.data;
+    }
+  } catch (error) {
+    console.error("Error adding product to cart:", error);
+    throw error;
+  }
 };

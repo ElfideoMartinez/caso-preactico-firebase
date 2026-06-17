@@ -6,6 +6,7 @@ import MainLayout from "../layouts/MainLayout";
 import PedidosPage from "../pages/PedidosPage";
 import ProtectedRoute from "../components/routes/ProtectedRoutes";
 import Users from "../pages/Users";
+import Products from "../pages/Products";
 
 export default function AppRoutes() {
   return (
@@ -26,6 +27,14 @@ export default function AppRoutes() {
             element={
               <ProtectedRoute>
                 <PedidosPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/productos'
+            element={
+              <ProtectedRoute>
+                <Products />
               </ProtectedRoute>
             }
           />

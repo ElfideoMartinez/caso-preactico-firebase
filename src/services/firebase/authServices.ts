@@ -4,6 +4,7 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 
 import auth from "./auth/Auth";
@@ -21,6 +22,9 @@ export function logout() {
 
 export function loginWithGoogle() {
   const provider = new GoogleAuthProvider();
-
   return signInWithPopup(auth, provider);
+}
+
+export function resetPassword(email: string) {
+  return sendPasswordResetEmail(auth, email);
 }
