@@ -104,7 +104,7 @@ function UserMenu() {
             <Text size={18} weight={600}>
               Total: $
               {userCart
-                .reduce((total, item) => total + item.subtotal, 0)
+                .reduce((total, item) => total + item?.subtotal, 0)
                 .toFixed(2)}
             </Text>
           </div>

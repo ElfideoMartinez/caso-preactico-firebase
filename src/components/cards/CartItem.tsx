@@ -1,13 +1,7 @@
 import Text from "../typography/Text";
 import Card from "./Card";
 
-const CartItem = ({
-  children,
-  item,
-}: {
-  children?: React.ReactNode;
-  item: any;
-}) => {
+const CartItem = ({ item }: { children?: React.ReactNode; item: any }) => {
   return (
     <Card style={{ display: "flex", flexDirection: "column" }}>
       <Text>
