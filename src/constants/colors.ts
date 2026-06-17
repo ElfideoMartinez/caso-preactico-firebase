@@ -34,4 +34,25 @@ export const colors = {
   black: "#000000",
 
   shadow: "rgba(15,23,42,0.08)",
+  primaryButton: {
+    text: "#FFFFFF",
+    background: "#2563EB",
+    border: "none",
+    borderRadius: 12,
+    padding: "12px 20px",
+    fontSize: 16,
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "0.2s",
+  },
+  greenButtonVariant: {
+    background: "#22C55E",
+    hover: "#16A34A",
+    text: "#FFFFFF",
+  },
+  disabledButtonVariant: {
+    background: "#E2E8F0",
+    text: "#94A3B8",
+    cursor: "not-allowed",
+  },
 };

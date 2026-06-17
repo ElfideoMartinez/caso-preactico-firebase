@@ -7,6 +7,7 @@ import CustomModal from "../modals/CustomModal";
 import Text from "../typography/Text";
 import { getUserCart } from "../../services/firebase/users";
 import { useAuth } from "../../contexts/AuthContext";
+import CartItem from "../cards/CartItem";
 
 function UserMenu() {
   const { user } = useAuth();
@@ -19,8 +20,8 @@ function UserMenu() {
       if (user) {
         try {
           const data = await getUserCart(user.uid);
-          console.log("User data:", data);
-          setUserCart(data?.products || []);
+          setUserCart(data || []);
+          console.log("User cart data:", data);
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
@@ -91,8 +92,30 @@ function UserMenu() {
           {userCart.length === 0 ? (
             <Text>No hay productos en el carrito.</Text>
           ) : (
-            userCart.map((item, index) => <Text key={index}>{item}</Text>)
+            userCart.map((item, index) => <CartItem key={index} item={item} />)
           )}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
+            <Text size={18} weight={600}>
+              Total: $
+              {userCart
+                .reduce((total, item) => total + item.subtotal, 0)
+                .toFixed(2)}
+            </Text>
+          </div>
+          <Button
+            onClick={() => {
+              navigate("/checkout");
+              setOpen("");
+            }}
+          >
+            Ir a checkout
+          </Button>
         </CustomModal>
       )}
     </div>

@@ -4,6 +4,7 @@ import Text from "../typography/Text";
 import { colors } from "../../constants/colors";
 import { addToCart } from "../../services/firebase/users/index";
 import { useAuth } from "../../contexts/AuthContext";
+import { useState } from "react";
 
 type ProductCardProps = {
   id: string;
@@ -26,6 +27,7 @@ function ProductCard({
 }: ProductCardProps) {
   const { user } = useAuth();
   const onSale = salePrice !== undefined && salePrice < price;
+  const [isLoading, setIsLoading] = useState(false);
 
   const outOfStock = stock <= 0;
 
@@ -163,9 +165,11 @@ function ProductCard({
         </div>
 
         <Button
+          disabled={!user || outOfStock || isLoading}
           onClick={async () => {
             //add cart object to user in firebase
             try {
+              setIsLoading(true);
               await addToCart(user?.uid || "", id, name, salePrice || price);
               alert("Product added to cart!");
             } catch (error) {
@@ -175,6 +179,8 @@ function ProductCard({
                   ? error.message
                   : "Error adding product to cart",
               );
+            } finally {
+              setIsLoading(false);
             }
           }}
         >
