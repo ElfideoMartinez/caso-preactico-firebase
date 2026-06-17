@@ -14,7 +14,6 @@ export const addNewProduct = async (name: string) => {
   return result.data;
 };
 export const getProducts = async () => {
-  console.log("Calling getProducts...");
   const response = await fetch(
     `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}getProducts`,
   );

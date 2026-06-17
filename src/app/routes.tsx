@@ -7,6 +7,7 @@ import PedidosPage from "../pages/PedidosPage";
 import ProtectedRoute from "../components/routes/ProtectedRoutes";
 import Users from "../pages/Users";
 import Products from "../pages/Products";
+import Inventory from "../pages/Inventory";
 
 export default function AppRoutes() {
   return (
@@ -35,6 +36,14 @@ export default function AppRoutes() {
             element={
               <ProtectedRoute>
                 <Products />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/inventory'
+            element={
+              <ProtectedRoute>
+                <Inventory />
               </ProtectedRoute>
             }
           />

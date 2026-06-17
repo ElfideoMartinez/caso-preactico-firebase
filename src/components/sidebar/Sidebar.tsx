@@ -43,6 +43,18 @@ function Sidebar() {
           Productos
         </NavLink>
         <NavLink
+          to='/inventory'
+          style={({ isActive }) => ({
+            padding: "12px 16px",
+            borderRadius: 8,
+            textDecoration: "none",
+            color: isActive ? colors.primary : colors.text,
+            background: isActive ? colors.primary + "20" : "transparent",
+          })}
+        >
+          Inventory
+        </NavLink>
+        <NavLink
           to='/users'
           style={({ isActive }) => ({
             padding: "12px 16px",
