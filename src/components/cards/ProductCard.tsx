@@ -2,9 +2,10 @@ import Card from "./Card";
 import Button from "../buttons/Button";
 import Text from "../typography/Text";
 import { colors } from "../../constants/colors";
-import { addToCart } from "../../services/firebase/users/index";
 import { useAuth } from "../../contexts/AuthContext";
 import { useState } from "react";
+import Swal from "sweetalert2";
+import { useCart } from "../../contexts/CartContext";
 
 type ProductCardProps = {
   id: string;
@@ -26,6 +27,7 @@ function ProductCard({
   stock,
 }: ProductCardProps) {
   const { user } = useAuth();
+  const { addItem } = useCart();
   const onSale = salePrice !== undefined && salePrice < price;
   const [isLoading, setIsLoading] = useState(false);
 
@@ -170,15 +172,21 @@ function ProductCard({
             //add cart object to user in firebase
             try {
               setIsLoading(true);
-              await addToCart(user?.uid || "", id, name, salePrice || price);
-              alert("Product added to cart!");
+              await addItem(id, name, salePrice || price);
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Product added to cart",
+                showConfirmButton: false,
+                timer: 1500,
+              });
             } catch (error) {
               console.error("Error adding product to cart:", error);
-              alert(
-                error instanceof Error
-                  ? error.message
-                  : "Error adding product to cart",
-              );
+              Swal.fire({
+                icon: "error",
+                title: "Failed to add product to cart",
+                text: "Please try again later.",
+              });
             } finally {
               setIsLoading(false);
             }

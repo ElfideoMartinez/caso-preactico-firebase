@@ -59,9 +59,7 @@ const AddNewProductModal = ({
         },
       }}
       isOpen={isOpen}
-      onAfterClose={() => {
-        setIsOpen(false);
-      }}
+      onRequestClose={() => setIsOpen(false)}
       ariaHideApp={false}
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>

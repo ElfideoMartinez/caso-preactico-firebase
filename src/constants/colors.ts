@@ -55,4 +55,22 @@ export const colors = {
     text: "#94A3B8",
     cursor: "not-allowed",
   },
+  gradients: {
+    primary: "linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #1D4ED8 100%)",
+
+    success: "linear-gradient(135deg, #4ADE80 0%, #22C55E 50%, #16A34A 100%)",
+
+    warning: "linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #D97706 100%)",
+
+    danger: "linear-gradient(135deg, #F87171 0%, #EF4444 50%, #DC2626 100%)",
+  },
+  softGradients: {
+    primary: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)",
+
+    success: "linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)",
+
+    warning: "linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)",
+
+    danger: "linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)",
+  },
 };

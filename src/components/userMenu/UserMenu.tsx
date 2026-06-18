@@ -7,11 +7,12 @@ import CustomModal from "../modals/CustomModal";
 import Text from "../typography/Text";
 import { getUserCart } from "../../services/firebase/users";
 import { useAuth } from "../../contexts/AuthContext";
+import { useCart } from "../../contexts/CartContext";
 import CartItem from "../cards/CartItem";
 
 function UserMenu() {
   const { user } = useAuth();
-  const [userCart, setUserCart] = useState<Array<any>>([]);
+  const { cart: userCart } = useCart();
   useEffect(() => {
     document.title = "User Menu - Innovate Solutions";
   }, []);
@@ -20,7 +21,6 @@ function UserMenu() {
       if (user) {
         try {
           const data = await getUserCart(user.uid);
-          setUserCart(data || []);
           console.log("User cart data:", data);
         } catch (error) {
           console.error("Error fetching user data:", error);
