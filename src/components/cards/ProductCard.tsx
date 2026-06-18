@@ -3,9 +3,11 @@ import Button from "../buttons/Button";
 import Text from "../typography/Text";
 import { colors } from "../../constants/colors";
 import { useAuth } from "../../contexts/AuthContext";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Swal from "sweetalert2";
 import { useCart } from "../../contexts/CartContext";
+import { getStorageRef } from "../../services/firebase/storage/storageService";
+import { getDownloadURL } from "firebase/storage";
 
 type ProductCardProps = {
   id: string;
@@ -30,8 +32,25 @@ function ProductCard({
   const { addItem } = useCart();
   const onSale = salePrice !== undefined && salePrice < price;
   const [isLoading, setIsLoading] = useState(false);
+  const [imageSrc, setImageSrc] = useState(imageUrl);
 
   const outOfStock = stock <= 0;
+
+  useMemo(() => {
+    const fetchImageUrl = async () => {
+      try {
+        console.log("Fetching image URL for:", imageUrl);
+        const storageRef = getStorageRef(imageUrl);
+        const url = await getDownloadURL(storageRef);
+        setImageSrc(url);
+      } catch (error) {
+        console.error("Error fetching image URL:", error);
+      }
+    };
+    if (imageUrl) {
+      fetchImageUrl();
+    }
+  }, [imageUrl]);
 
   return (
     <Card style={{ width: "max-content", minWidth: 300, margin: 16 }}>
@@ -49,7 +68,7 @@ function ProductCard({
           }}
         >
           <img
-            src={imageUrl}
+            src={imageSrc}
             alt={name}
             style={{
               width: "100%",
@@ -199,4 +218,4 @@ function ProductCard({
   );
 }
 
-export default ProductCard;
+export default useMemo(() => ProductCard, []);

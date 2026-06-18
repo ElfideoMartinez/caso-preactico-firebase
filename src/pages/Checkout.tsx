@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../components/cards/Card";
 import Text from "../components/typography/Text";
 import { typography } from "../constants/typography";
@@ -8,10 +8,12 @@ import Button from "../components/buttons/Button";
 import { addNewOrder } from "../services/firebase/users";
 import { useAuth } from "../contexts/AuthContext";
 import { addNewOrderRTDB } from "../services/firebase/realtimeDataBase";
+import Swal from "sweetalert2";
 
 const Checkout = () => {
   const { user } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const { cart } = location.state || {};
   const userTotal =
     cart?.reduce(
@@ -27,7 +29,11 @@ const Checkout = () => {
         userTotal,
       );
       if (!user || !user.uid) {
-        alert("Debes iniciar sesión para realizar una orden.");
+        Swal.fire({
+          icon: "error",
+          title: "User not authenticated",
+          text: "Please log in to complete your order.",
+        });
         return;
       }
       await addNewOrder(user.uid, userTotal, cart);
@@ -38,13 +44,20 @@ const Checkout = () => {
         status: "pending",
         userId: user.uid,
       });
-      alert("¡Orden realizada con éxito!");
+      Swal.fire({
+        icon: "success",
+        title: "¡Orden realizada con éxito!",
+        text: "Tu orden ha sido procesada correctamente.",
+      });
     } catch (error) {
       console.error("Error during checkout:", error);
-      alert(
-        "Hubo un error al procesar tu orden. Por favor, intenta nuevamente.",
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un error al procesar tu orden. Por favor, intenta nuevamente.",
+      });
     } finally {
+      navigate("/pedidos");
     }
   };
   return (

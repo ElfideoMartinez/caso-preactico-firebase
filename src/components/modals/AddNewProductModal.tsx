@@ -6,6 +6,10 @@ import Text from "../typography/Text";
 import { typography } from "../../constants/typography";
 import { useState } from "react";
 import { addNewProduct } from "../../services/firebase/products";
+import {
+  getStorageRef,
+  uploadFile,
+} from "../../services/firebase/storage/storageService";
 
 interface AddNewProductModalProps {
   isOpen: boolean;
@@ -23,6 +27,7 @@ const AddNewProductModal = ({
     description: "",
     price: "",
     stock: "",
+    imageUrl: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = async () => {
@@ -32,6 +37,7 @@ const AddNewProductModal = ({
         ...formData,
         price: Number(formData.price),
         stock: Number(formData.stock),
+        imageUrl: formData.imageUrl,
       });
       await refreshData();
     } catch (error) {
@@ -94,6 +100,21 @@ const AddNewProductModal = ({
             onChange={(e) =>
               setFormData({ ...formData, stock: e.target.value })
             }
+          />
+          <input
+            type='file'
+            onChange={async (e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                const storageRef = getStorageRef(`products/${file.name}`);
+                await uploadFile(file, storageRef.fullPath);
+                console.log(
+                  "Archivo subido a Firebase Storage:",
+                  storageRef.fullPath,
+                );
+                setFormData({ ...formData, imageUrl: storageRef.fullPath });
+              }
+            }}
           />
           <Button onClick={handleSubmit} disabled={isLoading}>
             {isLoading ? "Agregando..." : "Agregar producto"}

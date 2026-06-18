@@ -3,21 +3,35 @@ import { db } from "../../index"; // Import the initialized db from your root in
 
 export const addNewProduct = onRequest({ cors: true }, async (req, res) => {
   try {
-    const { name, description, price, stock } = req.body;
+    const { name, description, price, stock, imageUrl } = req.body;
 
-    if (!name || !description || price === undefined || stock === undefined) {
+    if (
+      !name ||
+      !description ||
+      price === undefined ||
+      stock === undefined ||
+      !imageUrl
+    ) {
       res.status(400).send({
         success: false,
-        message: "Missing required fields: name, description, price, stock",
+        message:
+          "Missing required fields: name, description, price, stock, imageUrl",
       });
     }
 
-    console.log("Received product data:", { name, description, price, stock });
+    console.log("Received product data:", {
+      name,
+      description,
+      price,
+      stock,
+      imageUrl,
+    });
     const docRef = await db.collection("products").add({
       name,
       description,
       price,
       stock,
+      imageUrl,
       createdAt: new Date(),
     });
 

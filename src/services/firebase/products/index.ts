@@ -3,6 +3,7 @@ export const addNewProduct = async (product: {
   description: string;
   price: number | null;
   stock: number | null;
+  imageUrl: string;
 }) => {
   const response = await fetch(
     `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}addNewProduct`,
@@ -19,12 +20,20 @@ export const addNewProduct = async (product: {
   return result.data;
 };
 export const getProducts = async () => {
-  console.log("Fetching products from backend...", {
-    url: `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}getProducts`,
-  });
+  const storageUrl = import.meta.env.VITE_FIREBASE_STORAGE_PRODUCTS_URL;
   const response = await fetch(
     `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}getProducts`,
   );
   const result = await response.json();
-  return result;
+  const formattedProducts = result.map((product: any) => ({
+    id: product.id,
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    stock: product.stock,
+    salePrice: product.salePrice,
+    imageUrl: product.imageUrl ? `${storageUrl}${product.imageUrl}` : null,
+  }));
+  console.log("Products fetched and formatted:", formattedProducts);
+  return formattedProducts;
 };
