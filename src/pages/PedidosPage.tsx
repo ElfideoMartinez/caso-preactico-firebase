@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import OrdersHeader from "../components/orders/OrdersHeader";
-import { getUserData } from "../services/firebase/users";
 import { useAuth } from "../contexts/AuthContext";
 import OrdersBody from "../components/orders/OrdersBody";
 import { spacing } from "../constants/spacing";
 import Text from "../components/typography/Text";
+import { getUserOrdersRTDB } from "../services/firebase/realtimeDataBase";
 
 const PedidosPage = () => {
   const { user, loading } = useAuth();
@@ -14,22 +14,15 @@ const PedidosPage = () => {
     document.title = "Pedidos - Innovate Solutions";
   }, []);
   useEffect(() => {
-    fetchUserData();
+    if (!user?.uid) return;
+
+    const unsubscribe = getUserOrdersRTDB(user.uid, (orders) => {
+      console.log("Orders updated:", orders);
+      setUserData(orders);
+    });
+
+    return () => unsubscribe();
   }, [user]);
-  const fetchUserData = async () => {
-    try {
-      console.log("Fetching user data for UID:", user?.uid);
-      if (user?.uid) {
-        const data = await getUserData(user.uid);
-        console.log("Fetched user data:", data);
-        setUserData(data);
-      } else {
-        console.warn("No user UID available to fetch data.");
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -44,8 +37,8 @@ const PedidosPage = () => {
         padding: spacing.lg,
       }}
     >
-      <OrdersHeader user={userData} />
-      <OrdersBody orders={userData?.orders || []} />
+      <OrdersHeader user={user as any} />
+      <OrdersBody orders={userData || []} />
     </div>
   );
 };

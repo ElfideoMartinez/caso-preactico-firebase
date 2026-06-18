@@ -7,6 +7,7 @@ import CartItem from "../components/cards/CartItem";
 import Button from "../components/buttons/Button";
 import { addNewOrder } from "../services/firebase/users";
 import { useAuth } from "../contexts/AuthContext";
+import { addNewOrderRTDB } from "../services/firebase/realtimeDataBase";
 
 const Checkout = () => {
   const { user } = useAuth();
@@ -25,7 +26,19 @@ const Checkout = () => {
         "and total:",
         userTotal,
       );
-      await addNewOrder(user?.uid, userTotal, cart);
+      if (!user || !user.uid) {
+        alert("Debes iniciar sesión para realizar una orden.");
+        return;
+      }
+      await addNewOrder(user.uid, userTotal, cart);
+      await addNewOrderRTDB({
+        cart,
+        total: userTotal,
+        timestamp: new Date().toISOString(),
+        status: "pending",
+        userId: user.uid,
+      });
+      alert("¡Orden realizada con éxito!");
     } catch (error) {
       console.error("Error during checkout:", error);
       alert(
