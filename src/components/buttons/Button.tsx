@@ -7,7 +7,11 @@ type ButtonProps = {
   disabled?: boolean;
   children: React.ReactNode;
   onClick?: () => Promise<void> | void;
-  variant?: "primaryButton" | "greenButtonVariant";
+  variant?:
+    | "primaryButton"
+    | "greenButtonVariant"
+    | "warningLightButton"
+    | "lightButtonVariant";
 };
 
 function Button({
@@ -38,7 +42,6 @@ function Button({
       ) : (
         <Text color={"#fff"}>{children}</Text>
       )}
-      <Text color={"#fff"}>{children}</Text>
     </button>
   );
 }

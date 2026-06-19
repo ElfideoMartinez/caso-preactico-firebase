@@ -22,17 +22,17 @@ const UsersTable = ({
     <table>
       <thead>
         <tr>
-          <th>Nombre</th>
-          <th>Email</th>
-          <th>Rol</th>
+          <th style={{ textAlign: "left" }}>Nombre</th>
+          <th style={{ textAlign: "left" }}>Email</th>
+          <th style={{ textAlign: "left" }}>Rol</th>
         </tr>
       </thead>
       <tbody>
         {users.map((user, index) => (
           <tr key={index}>
-            <td>{user.displayName}</td>
-            <td>{user.email}</td>
-            <td>{user.role}</td>
+            <td style={{ textAlign: "left" }}>{user.displayName}</td>
+            <td style={{ textAlign: "left" }}>{user.email}</td>
+            <td style={{ textAlign: "left" }}>{user.role}</td>
           </tr>
         ))}
       </tbody>

@@ -9,6 +9,7 @@ import Users from "../pages/Users";
 import Products from "../pages/Products";
 import Inventory from "../pages/Inventory";
 import Checkout from "../pages/Checkout";
+import Profile from "../pages/Profile";
 
 export default function AppRoutes() {
   return (
@@ -29,6 +30,14 @@ export default function AppRoutes() {
             element={
               <ProtectedRoute>
                 <PedidosPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/profile'
+            element={
+              <ProtectedRoute>
+                <Profile />
               </ProtectedRoute>
             }
           />

@@ -60,7 +60,14 @@ function UserMenu() {
       {open === "user" && (
         <CustomModal isOpen={open === "user"} onClose={() => setOpen("")}>
           <>
-            <button style={menuStyle}>Profile</button>
+            <button
+              onClick={() => {
+                navigate("/profile");
+              }}
+              style={menuStyle}
+            >
+              Profile
+            </button>
 
             <button style={menuStyle}>Settings</button>
 
