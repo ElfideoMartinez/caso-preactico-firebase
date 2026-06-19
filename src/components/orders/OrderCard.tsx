@@ -40,7 +40,9 @@ const OrderCard = ({
       }}
     >
       <>
-        <Text size={typography.small}>Orden</Text>
+        <Text size={typography.h3} weight={700}>
+          Orden
+        </Text>
         {children}
       </>
     </Card>

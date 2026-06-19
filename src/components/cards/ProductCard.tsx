@@ -3,7 +3,7 @@ import Button from "../buttons/Button";
 import Text from "../typography/Text";
 import { colors } from "../../constants/colors";
 import { useAuth } from "../../contexts/AuthContext";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useCart } from "../../contexts/CartContext";
 import { getStorageRef } from "../../services/firebase/storage/storageService";
@@ -36,17 +36,17 @@ function ProductCard({
 
   const outOfStock = stock <= 0;
 
-  useMemo(() => {
+  useEffect(() => {
     const fetchImageUrl = async () => {
       try {
-        console.log("Fetching image URL for:", imageUrl);
         const storageRef = getStorageRef(imageUrl);
         const url = await getDownloadURL(storageRef);
         setImageSrc(url);
       } catch (error) {
-        console.error("Error fetching image URL:", error);
+        console.error(error);
       }
     };
+
     if (imageUrl) {
       fetchImageUrl();
     }

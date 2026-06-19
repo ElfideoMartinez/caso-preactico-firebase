@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 import { getProducts } from "../services/firebase/products";
 import ProductCard from "../components/cards/ProductCard";
+import Text from "../components/typography/Text";
+import { typography } from "../constants/typography";
 
 const Products = () => {
   const [products, setProducts] = useState<Array<any>>([]);
@@ -19,7 +21,9 @@ const Products = () => {
   }, []);
   return (
     <>
-      <h1>Productos</h1>
+      <Text size={typography.h1} weight={700}>
+        Productos
+      </Text>
       {products.length > 0 ? (
         <div
           style={{

@@ -5,6 +5,7 @@ import Text from "../typography/Text";
 import { getStorageRef } from "../../services/firebase/storage/storageService";
 import { getDownloadURL } from "firebase/storage";
 import { useAuth } from "../../contexts/AuthContext";
+import { typography } from "../../constants/typography";
 interface OrdersHeaderProps {
   user: {
     displayName: string | null;
@@ -49,9 +50,24 @@ const OrdersHeader = ({ user }: OrdersHeaderProps) => {
               gap: spacing.sm,
             }}
           >
-            <Text>Name: {user.displayName || "N/A"}</Text>
-            <Text>Email: {user.email || "N/A"}</Text>
-            <Text>Role: {user.role || "N/A"}</Text>
+            <div
+              style={{ display: "flex", gap: spacing.sm, alignItems: "center" }}
+            >
+              <Text weight={700}>Name: </Text>
+              <Text size={typography.body}>{user.displayName || "N/A"}</Text>
+            </div>
+            <div
+              style={{ display: "flex", gap: spacing.sm, alignItems: "center" }}
+            >
+              <Text weight={700}>Email: </Text>
+              <Text size={typography.body}>{user.email || "N/A"}</Text>
+            </div>
+            <div
+              style={{ display: "flex", gap: spacing.sm, alignItems: "center" }}
+            >
+              <Text weight={700}>Role: </Text>
+              <Text size={typography.body}>{user.role || "N/A"}</Text>
+            </div>
           </div>
         )}
       </div>

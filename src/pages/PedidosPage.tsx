@@ -6,6 +6,7 @@ import { spacing } from "../constants/spacing";
 import Text from "../components/typography/Text";
 import { getUserOrdersRTDB } from "../services/firebase/realtimeDataBase";
 import { useCart } from "../contexts/CartContext";
+import { typography } from "../constants/typography";
 
 const PedidosPage = () => {
   const { user, loading } = useAuth();
@@ -39,6 +40,9 @@ const PedidosPage = () => {
         padding: spacing.lg,
       }}
     >
+      <Text size={typography.h1} weight={700}>
+        User Information
+      </Text>
       <OrdersHeader user={userData as any} />
       <OrdersBody orders={userOrders || []} />
     </div>

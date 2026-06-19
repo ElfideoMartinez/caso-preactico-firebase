@@ -37,7 +37,9 @@ const Inventory = () => {
           setIsOpen={setIsModalOpen}
           refreshData={fetchData}
         />
-        <Text size={typography.h1}>Inventario</Text>
+        <Text size={typography.h1} weight={700}>
+          Inventario
+        </Text>
         <Button onClick={() => setIsModalOpen(true)}>Agregar Producto</Button>
       </div>
       <ProductsTable products={data} setProducts={setData} />

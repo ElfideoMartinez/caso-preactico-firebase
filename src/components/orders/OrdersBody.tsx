@@ -33,7 +33,7 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
                   alignItems: "center",
                 }}
               >
-                <Text>Id:</Text>
+                <Text weight={700}>Id:</Text>
                 <Text color={colors.primary}>{item.id}</Text>
               </div>
               <div
@@ -43,7 +43,7 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
                   alignItems: "center",
                 }}
               >
-                <Text>Status:</Text>
+                <Text weight={700}>Status:</Text>
                 <Text
                   color={statusColors[item.status]}
                   style={{ textTransform: "capitalize" }}
@@ -51,10 +51,28 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
                   {item.status}
                 </Text>
               </div>
-              <Text>Total: ${item.total.toFixed(2)}</Text>
-              <Text>Fecha: {new Date(item.timestamp).toLocaleString()}</Text>
+              <div
+                style={{
+                  display: "flex",
+                  gap: spacing.sm,
+                  alignItems: "center",
+                }}
+              >
+                <Text weight={700}>Total:</Text>
+                <Text>${item.total.toFixed(2)}</Text>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  gap: spacing.sm,
+                  alignItems: "center",
+                }}
+              >
+                <Text weight={700}>Fecha:</Text>
+                <Text>{new Date(item.timestamp).toLocaleString()}</Text>
+              </div>
               <div style={{ marginTop: 10 }}>
-                <Text>Productos:</Text>
+                <Text weight={700}>Productos:</Text>
                 <>
                   {item.cart.map((product: any, idx: number) => (
                     <div
@@ -66,8 +84,10 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
                       }}
                       key={idx}
                     >
-                      {product.name} - ${product.price} X {product.quantity} = $
-                      {product.subtotal}
+                      <Text>
+                        {product.name} - ${product.price} X {product.quantity} =
+                        ${product.subtotal}
+                      </Text>
                       {product.description && (
                         <Text size={typography.small}>
                           {product.description}

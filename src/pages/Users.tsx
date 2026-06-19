@@ -6,12 +6,13 @@ import { getAllUsers } from "../services/firebase/users";
 import Button from "../components/buttons/Button";
 import AddNewUserModal from "../components/modals/addNewUserModal";
 import Text from "../components/typography/Text";
+import { typography } from "../constants/typography";
 
 const Users = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [users, setUsers] = useState<
-    Array<{ displayName: string; email: string; role: string }>
+    Array<{ displayName: string; email: string; role: string; uid: string }>
   >([]);
   useEffect(() => {
     document.title = "Usuarios - Innovate Solutions";
@@ -34,7 +35,7 @@ const Users = () => {
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
       />
-      <Text size={24} weight={700}>
+      <Text size={typography.h1} weight={700}>
         Gestión de Usuarios
       </Text>
       <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
