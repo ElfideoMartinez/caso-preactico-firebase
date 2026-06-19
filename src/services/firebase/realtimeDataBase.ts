@@ -25,6 +25,7 @@ export const updateOrderStatusRTDB = async (
 
 export const getUserOrdersRTDB = (
   userId: string,
+  userRole: string,
   callback: (orders: any[]) => void,
 ) => {
   const ordersRef = ref(rtdb, "orders");
@@ -39,7 +40,16 @@ export const getUserOrdersRTDB = (
         return;
       }
 
-      const userOrders = [];
+      let userOrders = [];
+      //if the user is admin, return all orders
+      if (userRole === "admin") {
+        userOrders = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        callback(userOrders);
+        return;
+      }
 
       for (const key in data) {
         if (data[key].userId === userId) {

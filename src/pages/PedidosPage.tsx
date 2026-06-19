@@ -19,12 +19,16 @@ const PedidosPage = () => {
   useEffect(() => {
     if (!user?.uid) return;
 
-    const unsubscribe = getUserOrdersRTDB(userData?.uid, (orders) => {
-      setUserOrders(orders);
-    });
+    const unsubscribe = getUserOrdersRTDB(
+      userData?.uid,
+      userData?.role,
+      (orders) => {
+        setUserOrders(orders);
+      },
+    );
 
     return () => unsubscribe();
-  }, [user]);
+  }, [user, userData]);
 
   if (loading) {
     return <Text>Loading...</Text>;

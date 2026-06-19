@@ -1,6 +1,13 @@
 import { NavLink } from "react-router-dom";
 import { colors } from "../../constants/colors";
 import { useCart } from "../../contexts/CartContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBoxOpen,
+  faShoppingCart,
+  faUser,
+  faWarehouse,
+} from "@fortawesome/free-solid-svg-icons";
 
 type RoleOptions = "admin" | "user";
 
@@ -36,6 +43,7 @@ function Sidebar() {
             background: isActive ? colors.primary + "20" : "transparent",
           })}
         >
+          <FontAwesomeIcon icon={faShoppingCart} style={{ marginRight: 8 }} />
           Pedidos
         </NavLink>
         <NavLink
@@ -48,6 +56,7 @@ function Sidebar() {
             background: isActive ? colors.primary + "20" : "transparent",
           })}
         >
+          <FontAwesomeIcon icon={faBoxOpen} style={{ marginRight: 8 }} />
           Productos
         </NavLink>
         {allowedRoutesByRole[
@@ -63,6 +72,7 @@ function Sidebar() {
               background: isActive ? colors.primary + "20" : "transparent",
             })}
           >
+            <FontAwesomeIcon icon={faWarehouse} style={{ marginRight: 8 }} />
             Inventory
           </NavLink>
         )}
@@ -79,6 +89,7 @@ function Sidebar() {
               background: isActive ? colors.primary + "20" : "transparent",
             })}
           >
+            <FontAwesomeIcon icon={faUser} style={{ marginRight: 8 }} />
             Users
           </NavLink>
         )}

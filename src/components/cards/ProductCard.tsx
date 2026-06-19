@@ -40,7 +40,14 @@ function ProductCard({
     setCuantityControl((prev) => {
       const newQuantity = prev + delta;
       if (newQuantity < 1) return 1;
-      if (newQuantity > stock) return stock;
+      if (newQuantity > stock) {
+        Swal.fire({
+          icon: "warning",
+          title: "Limite de stock alcanzado",
+          text: `Solo ${stock} artículos disponibles en stock.`,
+        });
+        return stock;
+      }
       return newQuantity;
     });
   };

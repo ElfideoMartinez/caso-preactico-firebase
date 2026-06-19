@@ -7,6 +7,8 @@ import CustomModal from "../modals/CustomModal";
 import Text from "../typography/Text";
 import { useCart } from "../../contexts/CartContext";
 import CartItem from "../cards/CartItem";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
 
 function UserMenu() {
   const { cart } = useCart();
@@ -27,7 +29,7 @@ function UserMenu() {
           setOpen("cart");
         }}
       >
-        🛒
+        <FontAwesomeIcon icon={faShoppingCart} style={{ marginRight: 8 }} />
       </Button>
       <button
         onClick={() => setOpen("user")}
@@ -38,7 +40,7 @@ function UserMenu() {
           marginLeft: 16,
         }}
       >
-        👤
+        <FontAwesomeIcon icon={faUser} style={{ marginRight: 8 }} />
       </button>
 
       {open === "user" && (

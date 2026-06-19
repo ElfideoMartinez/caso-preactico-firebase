@@ -80,7 +80,7 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
               <div style={{ marginTop: 10 }}>
                 <Text weight={700}>Productos:</Text>
                 <>
-                  {item.cart.map((product: any, idx: number) => (
+                  {item.cart?.map((product: any, idx: number) => (
                     <div
                       style={{
                         display: "flex",
