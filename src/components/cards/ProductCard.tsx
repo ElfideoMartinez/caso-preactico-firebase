@@ -33,9 +33,17 @@ function ProductCard({
   const onSale = salePrice !== undefined && salePrice < price;
   const [isLoading, setIsLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState(imageUrl);
+  const [cuantityControl, setCuantityControl] = useState(1);
 
   const outOfStock = stock <= 0;
-
+  const handleQuantityChange = (delta: number) => {
+    setCuantityControl((prev) => {
+      const newQuantity = prev + delta;
+      if (newQuantity < 1) return 1;
+      if (newQuantity > stock) return stock;
+      return newQuantity;
+    });
+  };
   useEffect(() => {
     const fetchImageUrl = async () => {
       try {
@@ -153,7 +161,6 @@ function ProductCard({
             </Text>
           )}
         </div>
-
         <div>
           {outOfStock ? (
             <div
@@ -185,14 +192,24 @@ function ProductCard({
             )
           )}
         </div>
-
+        <div
+          style={{
+            display: "flex",
+            gap: 8,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Button onClick={() => handleQuantityChange(-1)}>-</Button>
+          <Text>{cuantityControl}</Text>
+          <Button onClick={() => handleQuantityChange(1)}>+</Button>
+        </div>
         <Button
           disabled={!user || outOfStock || isLoading}
           onClick={async () => {
-            //add cart object to user in firebase
             try {
               setIsLoading(true);
-              await addItem(id, name, salePrice || price);
+              await addItem(id, name, salePrice || price, cuantityControl);
               Swal.fire({
                 position: "top-end",
                 icon: "success",

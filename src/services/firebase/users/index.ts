@@ -70,6 +70,7 @@ export const addToCart = async (
   productId: string,
   name: string,
   sellingPrice: number,
+  quantity: number = 1,
 ) => {
   try {
     console.log("Adding to cart:", { uid, productId, name, sellingPrice });
@@ -80,7 +81,7 @@ export const addToCart = async (
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ uid, productId, name, sellingPrice }),
+        body: JSON.stringify({ uid, productId, name, sellingPrice, quantity }),
       },
     );
     if (!response.ok) {

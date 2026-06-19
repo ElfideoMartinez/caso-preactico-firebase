@@ -6,7 +6,12 @@ type CartContextType = {
   cart: any[];
   userData: any;
   refreshCart: () => Promise<void>;
-  addItem: (productId: string, name: string, price: number) => Promise<void>;
+  addItem: (
+    productId: string,
+    name: string,
+    price: number,
+    quantity: number,
+  ) => Promise<void>;
 };
 
 const CartContext = createContext<CartContextType>({
@@ -35,9 +40,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     refreshCart();
   }, [user]);
 
-  const addItem = async (productId: string, name: string, price: number) => {
+  const addItem = async (
+    productId: string,
+    name: string,
+    price: number,
+    quantity: number,
+  ) => {
     if (!user) return;
-    await addToCart(user.uid, productId, name, price);
+    await addToCart(user.uid, productId, name, price, quantity);
     await refreshCart();
   };
 
