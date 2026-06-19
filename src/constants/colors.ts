@@ -1,42 +1,35 @@
 export const colors = {
-  // Brand
-  primary: "#2563EB",
-  primaryHover: "#1D4ED8",
-  primaryLight: "#DBEAFE",
+  primary: "#6CA651",
+  primaryHover: "#5A8C43",
+  primaryLight: "#BBCB2E",
+  secondary: "#839705",
 
-  secondary: "#0F172A",
+  backgroundColor: "#F8FAF2",
+  surface: "#FFFFFF",
+  surfaceHover: "#EEF3D8",
 
-  // Backgrounds
-  backgroundColor: "#FFFFFF",
-  surface: "#F8FAFC",
-  surfaceHover: "#F1F5F9",
+  text: "#2F3820",
+  textSecondary: "#6B7445",
+  textDisabled: "#A0AA7D",
 
-  // Text
-  text: "#1E293B",
-  textSecondary: "#64748B",
-  textDisabled: "#94A3B8",
+  border: "#DDE5BE",
 
-  // Border
-  border: "#E2E8F0",
+  success: "#6CA651",
+  successLight: "#E7F2DD",
 
-  // States
-  success: "#22C55E",
-  successLight: "#DCFCE7",
+  warning: "#D6B435",
+  warningLight: "#F9F3D7",
 
-  warning: "#F59E0B",
-  warningLight: "#FEF3C7",
+  danger: "#C96A57",
+  dangerLight: "#F8E1DC",
 
-  danger: "#EF4444",
-  dangerLight: "#FEE2E2",
-
-  // Misc
   white: "#FFFFFF",
   black: "#000000",
+  shadow: "rgba(107,116,69,0.1)",
 
-  shadow: "rgba(15,23,42,0.08)",
   primaryButton: {
     text: "#FFFFFF",
-    backgroundColor: "#2563EB",
+    backgroundColor: "#6CA651",
     border: "none",
     borderRadius: 12,
     padding: "12px 20px",
@@ -45,33 +38,11 @@ export const colors = {
     cursor: "pointer",
     transition: "0.2s",
   },
-  dangerLightButton: {
-    text: "#EF4444",
-    backgroundColor: "#FEE2E2",
-    border: "none",
-    borderRadius: 12,
-    padding: "12px 20px",
-    fontSize: 16,
-    fontWeight: 600,
-    cursor: "pointer",
-    transition: "0.2s",
-  },
-  warningLightButton: {
-    text: "#F59E0B",
-    backgroundColor: "#FEF3C7",
-    border: "none",
-    borderRadius: 12,
-    padding: "12px 20px",
-    fontSize: 16,
-    fontWeight: 600,
-    cursor: "pointer",
-    transition: "0.2s",
-  },
+
   lightButtonVariant: {
-    color: "#1E293B",
-    text: "#1E293B",
-    backgroundColor: "#F8FAFC",
-    border: "1px solid #E2E8F0",
+    text: "#2F3820",
+    backgroundColor: "#FFFFFF",
+    border: "2px solid #6CA651",
     borderRadius: 12,
     padding: "12px 20px",
     fontSize: 16,
@@ -79,10 +50,11 @@ export const colors = {
     cursor: "pointer",
     transition: "0.2s",
   },
-  greenButtonVariant: {
-    backgroundColor: "#22C55E",
-    hover: "#16A34A",
+
+  successButtonVariant: {
     text: "#FFFFFF",
+    backgroundColor: "#839705",
+    hover: "#6B7D04",
     borderRadius: 12,
     padding: "12px 20px",
     fontSize: 16,
@@ -90,27 +62,48 @@ export const colors = {
     cursor: "pointer",
     transition: "0.2s",
   },
+
+  warningLightButton: {
+    text: "#8A6800",
+    backgroundColor: "#FFF3C2",
+    border: "1px solid #D6B435",
+    borderRadius: 12,
+    padding: "12px 20px",
+    fontSize: 16,
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "0.2s",
+  },
+
+  dangerLightButton: {
+    text: "#973C2D",
+    backgroundColor: "#FFE7E2",
+    border: "1px solid #C96A57",
+    borderRadius: 12,
+    padding: "12px 20px",
+    fontSize: 16,
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "0.2s",
+  },
+
   disabledButtonVariant: {
-    backgroundColor: "#E2E8F0",
-    text: "#94A3B8",
+    backgroundColor: "#E7ECD3",
+    text: "#8A9370",
     cursor: "not-allowed",
   },
+
   gradients: {
-    primary: "linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #1D4ED8 100%)",
-
-    success: "linear-gradient(135deg, #4ADE80 0%, #22C55E 50%, #16A34A 100%)",
-
-    warning: "linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #D97706 100%)",
-
-    danger: "linear-gradient(135deg, #F87171 0%, #EF4444 50%, #DC2626 100%)",
+    primary: "linear-gradient(135deg, #BBCB2E 0%, #839705 50%, #6CA651 100%)",
+    success: "linear-gradient(135deg, #8BC56F 0%, #6CA651 50%, #5A8C43 100%)",
+    warning: "linear-gradient(135deg, #E5CC66 0%, #D6B435 50%, #B5941F 100%)",
+    danger: "linear-gradient(135deg, #E29A8C 0%, #C96A57 50%, #A54E3F 100%)",
   },
+
   softGradients: {
-    primary: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)",
-
-    success: "linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)",
-
-    warning: "linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)",
-
-    danger: "linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)",
+    primary: "linear-gradient(135deg, #EEF6D4 0%, #DCEAA8 100%)",
+    success: "linear-gradient(135deg, #DFF0D1 0%, #BFE09E 100%)",
+    warning: "linear-gradient(135deg, #FFF6CC 0%, #F5DD8A 100%)",
+    danger: "linear-gradient(135deg, #FFE2DB 0%, #F4B8AA 100%)",
   },
 };

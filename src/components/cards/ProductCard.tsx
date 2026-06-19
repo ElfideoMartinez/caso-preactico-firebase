@@ -81,8 +81,9 @@ function ProductCard({
             src={imageSrc}
             alt={name}
             style={{
+              width: "100%",
               height: 220,
-              objectFit: "cover",
+              objectFit: "fill",
               borderRadius: 12,
             }}
           />

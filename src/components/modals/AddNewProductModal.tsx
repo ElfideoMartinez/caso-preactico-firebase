@@ -6,6 +6,7 @@ import Text from "../typography/Text";
 import { typography } from "../../constants/typography";
 import { useState } from "react";
 import { addNewProduct } from "../../services/firebase/products";
+import NewProductImageInput from "../inputs/NewProductImageInput";
 import {
   getStorageRef,
   uploadFile,
@@ -71,6 +72,16 @@ const AddNewProductModal = ({
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <Text size={typography.h1}>Agregar nuevo producto</Text>
         <Card style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <NewProductImageInput
+            handleImageUpload={async (file) => {
+              const storageRef = getStorageRef(`/productss/${file.name}`);
+              const imageUrl = await uploadFile(file, storageRef.fullPath);
+              setFormData({
+                ...formData,
+                imageUrl: imageUrl.metadata.fullPath,
+              });
+            }}
+          />
           <Input
             type='text'
             placeholder='Nombre del producto'
@@ -100,21 +111,6 @@ const AddNewProductModal = ({
             onChange={(e) =>
               setFormData({ ...formData, stock: e.target.value })
             }
-          />
-          <input
-            type='file'
-            onChange={async (e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                const storageRef = getStorageRef(`products/${file.name}`);
-                await uploadFile(file, storageRef.fullPath);
-                console.log(
-                  "Archivo subido a Firebase Storage:",
-                  storageRef.fullPath,
-                );
-                setFormData({ ...formData, imageUrl: storageRef.fullPath });
-              }
-            }}
           />
           <Button onClick={handleSubmit} disabled={isLoading}>
             {isLoading ? "Agregando..." : "Agregar producto"}
