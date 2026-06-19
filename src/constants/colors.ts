@@ -45,6 +45,17 @@ export const colors = {
     cursor: "pointer",
     transition: "0.2s",
   },
+  dangerLightButton: {
+    text: "#EF4444",
+    backgroundColor: "#FEE2E2",
+    border: "none",
+    borderRadius: 12,
+    padding: "12px 20px",
+    fontSize: 16,
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "0.2s",
+  },
   warningLightButton: {
     text: "#F59E0B",
     backgroundColor: "#FEF3C7",

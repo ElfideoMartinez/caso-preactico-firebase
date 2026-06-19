@@ -1,14 +1,25 @@
-import { ref, set, onValue } from "firebase/database";
+import { ref, set, onValue, update } from "firebase/database";
 import { rtdb } from "./firebaseApp";
 
 export const addNewOrderRTDB = async (orderData: any) => {
   try {
-    //create name by date and time
     const newName = `order_${new Date().getTime()}`;
     const productRef = ref(rtdb, `orders/${newName}`);
     await set(productRef, orderData);
   } catch (error) {
     console.error("Error adding new order: ", error);
+  }
+};
+
+export const updateOrderStatusRTDB = async (
+  orderId: string,
+  newStatus: string,
+) => {
+  try {
+    const orderRef = ref(rtdb, `orders/${orderId}`);
+    await update(orderRef, { status: newStatus });
+  } catch (error) {
+    console.error("Error updating order status: ", error);
   }
 };
 

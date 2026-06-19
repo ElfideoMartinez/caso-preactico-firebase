@@ -42,9 +42,7 @@ const Select = ({ options, onChange, initialValue }: SelectProps) => {
       }}
     >
       {initialValue ? (
-        <option selected value={initialValue}>
-          {initialValue}
-        </option>
+        <option defaultValue={initialValue}>{initialValue}</option>
       ) : (
         <option value=''>Seleccionar rol</option>
       )}

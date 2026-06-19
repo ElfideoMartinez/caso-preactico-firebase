@@ -3,10 +3,11 @@ import { colors } from "../../constants/colors";
 import Text from "../typography/Text";
 import { ClipLoader } from "react-spinners";
 
-type ButtonVariant = Extract<
+export type ButtonVariant = Extract<
   keyof typeof colors,
   | "primaryButton"
   | "warningLightButton"
+  | "dangerLightButton"
   | "lightButtonVariant"
   | "greenButtonVariant"
   | "disabledButtonVariant"

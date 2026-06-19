@@ -7,6 +7,8 @@ import { spacing } from "../../constants/spacing";
 import { useCart } from "../../contexts/CartContext";
 import Button from "../buttons/Button";
 import Swal from "sweetalert2";
+import type { ButtonVariant } from "../buttons/Button";
+import { updateOrderStatusRTDB } from "../../services/firebase/realtimeDataBase";
 
 interface OrdersBodyProps {
   orders: any[];
@@ -63,7 +65,7 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
                 }}
               >
                 <Text weight={700}>Total:</Text>
-                <Text>${item.total.toFixed(2)}</Text>
+                <Text>${item.total?.toFixed(2) || "0.00"}</Text>
               </div>
               <div
                 style={{
@@ -90,7 +92,7 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
                     >
                       <Text>
                         {product.name} - ${product.price} X {product.quantity} =
-                        ${product.subtotal}
+                        ${product.subtotal?.toFixed(2) || "0.00"}
                       </Text>
                       {product.description && (
                         <Text size={typography.small}>
@@ -111,63 +113,114 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
     </Card>
   );
 };
+type OrderStatus = "pending" | "active" | "cancelled" | "completed";
 interface AdminOrdersBodyProps {
   orderId: any;
-  status?: string;
+  status?: OrderStatus;
 }
-const AdminOrdersBody = ({ orderId, status }: AdminOrdersBodyProps) => {
-  const statusColors: { [key: string]: string } = {
-    pending: colors.warning,
-    active: colors.success,
-    cancelled: colors.danger,
-    completed: colors.primary,
+const AdminOrdersBody = ({
+  orderId,
+  status = "pending",
+}: AdminOrdersBodyProps) => {
+  const statusColors: { [key in OrderStatus]: ButtonVariant } = {
+    pending: "primaryButton",
+    active: "lightButtonVariant",
+    cancelled: "warningLightButton",
+    completed: "dangerLightButton",
+  };
+  const statusActions: { [key in OrderStatus]: any[] } = {
+    pending: [
+      {
+        label: "Marcar como Activa",
+        color: statusColors[status as OrderStatus],
+        icon: "check",
+        function: async () => {
+          await updateOrderStatusRTDB(orderId, "active");
+          Swal.fire(
+            "Exito",
+            `La orden ${orderId} ha sido marcada como activa exitosamente.`,
+            "success",
+          );
+        },
+      },
+    ],
+    active: [
+      {
+        label: "Cancelar Orden",
+        color: statusColors["completed"],
+        icon: "times",
+        function: async () => {
+          await updateOrderStatusRTDB(orderId, "cancelled");
+          await Swal.fire(
+            "Exito",
+            `La orden ${orderId} ha sido cancelada exitosamente.`,
+            "success",
+          );
+        },
+      },
+      {
+        label: "Marcar como Realizada",
+        color: statusColors["pending"],
+        icon: "check",
+        function: async () => {
+          await updateOrderStatusRTDB(orderId, "completed");
+          Swal.fire(
+            "Exito",
+            `La orden ${orderId} ha sido marcada como completada exitosamente.`,
+            "success",
+          );
+        },
+      },
+    ],
+    cancelled: [
+      {
+        label: "Cancelar Orden",
+        color: statusColors["cancelled"],
+        icon: "times",
+        function: async () => {
+          await updateOrderStatusRTDB(orderId, "cancelled");
+          Swal.fire(
+            "Exito",
+            `La orden ${orderId} ha sido cancelada exitosamente.`,
+            "success",
+          );
+        },
+      },
+    ],
+    completed: [
+      {
+        label: "Realizar Devolución",
+        color: statusColors["cancelled"],
+        icon: "check",
+        function: async () => {
+          await updateOrderStatusRTDB(orderId, "cancelled");
+          await Swal.fire(
+            "Exito",
+            `La orden ${orderId} ha sido cancelada exitosamente.`,
+            "success",
+          );
+        },
+      },
+    ],
   };
 
   return (
     <div
       style={{
         display: "flex",
-        justifyContent: "space-evenly",
+        justifyContent: "flex-end",
+        gap: spacing.lg,
         marginRight: spacing.lg,
         marginTop: spacing.lg,
         borderTop: `1px solid ${colors.border}`,
-        paddingTop: spacing.lg,
+        padding: spacing.lg,
       }}
     >
-      <Button
-        variant='greenButtonVariant'
-        onClick={async () => {
-          await Swal.fire(
-            "Funcionalidad no implementada",
-            `Esta funcionalidad aún no está implementada para la orden ${orderId}.`,
-            "info",
-          );
-        }}
-      >
-        Marcar como Activa
-      </Button>
-      <Button
-        onClick={async () => {
-          await Swal.fire(
-            "Funcionalidad no implementada",
-            "Esta funcionalidad aún no está implementada.",
-            "info",
-          );
-        }}
-      >
-        Filtrar por Status
-      </Button>
-      <Button
-        onClick={async () => {
-          await Swal.fire(
-            "Funcionalidad no implementada",
-            "Esta funcionalidad aún no está implementada.",
-            "info",
-          );
-        }}
-      >
-        Filtrar por Fecha
-      </Button>
+      {statusActions[status as OrderStatus]?.map((action, index) => (
+        <Button variant={action.color} key={index} onClick={action.function}>
+          {action.label}
+        </Button>
+      ))}
     </div>
   );
 };
