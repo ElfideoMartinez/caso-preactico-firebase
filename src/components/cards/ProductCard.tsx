@@ -6,8 +6,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useCart } from "../../contexts/CartContext";
-import { getStorageRef } from "../../services/firebase/storage/storageService";
-import { getDownloadURL } from "firebase/storage";
+import { useImageCache } from "../../contexts/ImageCacheContext";
 
 type ProductCardProps = {
   id: string;
@@ -30,6 +29,7 @@ function ProductCard({
 }: ProductCardProps) {
   const { user } = useAuth();
   const { addItem } = useCart();
+  const getCachedUrl = useImageCache();
   const onSale = salePrice !== undefined && salePrice < price;
   const [isLoading, setIsLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState(imageUrl);
@@ -52,19 +52,22 @@ function ProductCard({
     });
   };
   useEffect(() => {
-    const fetchImageUrl = async () => {
-      try {
-        const storageRef = getStorageRef(imageUrl);
-        const url = await getDownloadURL(storageRef);
-        setImageSrc(url);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (imageUrl) {
-      fetchImageUrl();
+    if (!imageUrl) {
+      return;
     }
+    let active = true;
+    getCachedUrl(imageUrl)
+      .then((url) => {
+        if (active) {
+          setImageSrc(url);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    return () => {
+      active = false;
+    };
   }, [imageUrl]);
 
   return (

@@ -12,7 +12,7 @@ export const editProduct = async (
   value: Value,
 ) => {
   const response = await fetch(
-    `http://127.0.0.1:5001/caso-practico-9de94/us-central1/editProduct`,
+    `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}editProduct`,
     {
       method: "POST",
       headers: {

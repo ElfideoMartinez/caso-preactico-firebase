@@ -12,7 +12,7 @@ import { updateOrderStatusRTDB } from "../../services/firebase/realtimeDataBase"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { editProduct } from "../../services/firebase/products/EditProduct";
+import { addRemoveInventory } from "../../services/firebase/products/addRemoveInventory";
 
 interface OrdersBodyProps {
   orders: any[];
@@ -142,7 +142,7 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
                 )}
               </div>
               {role === "admin" && (
-                <AdminOrdersBody orderId={item.id} status={item.status} />
+                <AdminOrdersBody orderId={item.uid} status={item.status} />
               )}
             </OrderCard>
           ))}
@@ -173,8 +173,8 @@ const AdminOrdersBody = ({
         color: statusColors[status as OrderStatus],
         icon: "check",
         function: async () => {
-          await updateOrderStatusRTDB(orderId, "active");
-          await editProduct(orderId, "stock", "decrement");
+          // await updateOrderStatusRTDB(orderId, "active");
+          await addRemoveInventory(orderId, "decrement");
           Swal.fire(
             "Exito",
             `La orden ${orderId} ha sido marcada como activa exitosamente.`,

@@ -47,7 +47,6 @@ const AddNewUserModal = ({ isOpen, onRequestClose }: AddNewUserModalProps) => {
     } catch (error) {
       console.error("Error al agregar nuevo usuario:", error);
     } finally {
-      console.log("Proceso de agregar nuevo usuario finalizado");
       setIsLoading(false);
     }
   };

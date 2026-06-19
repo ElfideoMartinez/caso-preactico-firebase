@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import DataTable, { type TableColumn } from "react-data-table-component";
 import Text from "../typography/Text";
 import Input from "../inputs/Input";
@@ -80,7 +79,6 @@ const ProductsTable = ({
           value={row.stock}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
-              console.log("Enter key pressed, saving changes...");
               e.preventDefault();
               await editProduct(row.id, "stock", row.stock);
               return;
@@ -93,9 +91,6 @@ const ProductsTable = ({
       ),
     },
   ];
-  useEffect(() => {
-    setProducts(products);
-  }, [products]);
   if (products.length === 0) {
     return <Text>No hay productos disponibles.</Text>;
   }

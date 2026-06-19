@@ -15,7 +15,7 @@ const Products = () => {
   };
   useEffect(() => {
     fetchProducts();
-  });
+  }, []);
   return (
     <>
       <Text size={typography.h1} weight={700}>

@@ -6,7 +6,7 @@ export const addRemoveInventory = async (
     const field = "stock";
     const value = action === "increment" ? 1 : -1;
     const response = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/addRemoveInventory`,
+      `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}addRemoveInventory`,
       {
         method: "POST",
         headers: {
@@ -15,6 +15,9 @@ export const addRemoveInventory = async (
         body: JSON.stringify({ orderUid: orderId, field, value }),
       },
     );
+    if (!response.ok) {
+      throw new Error("Failed to update inventory");
+    }
     const result = await response.json();
     return result;
   } catch (error) {
