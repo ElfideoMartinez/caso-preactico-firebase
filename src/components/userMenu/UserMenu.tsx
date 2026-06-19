@@ -13,9 +13,6 @@ function UserMenu() {
   useEffect(() => {
     document.title = "User Menu - Innovate Solutions";
   }, []);
-  useEffect(() => {
-    console.log("Cart updated:", cart);
-  }, [cart]);
   const navigate = useNavigate();
   const [open, setOpen] = useState("");
 

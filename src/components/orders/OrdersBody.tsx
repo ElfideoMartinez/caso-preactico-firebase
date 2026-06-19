@@ -13,7 +13,6 @@ interface OrdersBodyProps {
 }
 
 const OrdersBody = ({ orders }: OrdersBodyProps) => {
-  console.log("Orders in OrdersBody:", orders);
   const { role } = useCart().userData || {};
   const statusColors: { [key: string]: string } = {
     pending: colors.warning,

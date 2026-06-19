@@ -7,7 +7,7 @@ export const colors = {
   secondary: "#0F172A",
 
   // Backgrounds
-  background: "#FFFFFF",
+  backgroundColor: "#FFFFFF",
   surface: "#F8FAFC",
   surfaceHover: "#F1F5F9",
 
@@ -36,7 +36,7 @@ export const colors = {
   shadow: "rgba(15,23,42,0.08)",
   primaryButton: {
     text: "#FFFFFF",
-    background: "#2563EB",
+    backgroundColor: "#2563EB",
     border: "none",
     borderRadius: 12,
     padding: "12px 20px",
@@ -47,7 +47,7 @@ export const colors = {
   },
   warningLightButton: {
     text: "#F59E0B",
-    background: "#FEF3C7",
+    backgroundColor: "#FEF3C7",
     border: "none",
     borderRadius: 12,
     padding: "12px 20px",
@@ -59,7 +59,7 @@ export const colors = {
   lightButtonVariant: {
     color: "#1E293B",
     text: "#1E293B",
-    background: "#F8FAFC",
+    backgroundColor: "#F8FAFC",
     border: "1px solid #E2E8F0",
     borderRadius: 12,
     padding: "12px 20px",
@@ -69,7 +69,7 @@ export const colors = {
     transition: "0.2s",
   },
   greenButtonVariant: {
-    background: "#22C55E",
+    backgroundColor: "#22C55E",
     hover: "#16A34A",
     text: "#FFFFFF",
     borderRadius: 12,
@@ -80,7 +80,7 @@ export const colors = {
     transition: "0.2s",
   },
   disabledButtonVariant: {
-    background: "#E2E8F0",
+    backgroundColor: "#E2E8F0",
     text: "#94A3B8",
     cursor: "not-allowed",
   },

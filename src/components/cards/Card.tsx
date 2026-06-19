@@ -9,7 +9,7 @@ function Card({ children, style }: CardProps) {
   return (
     <div
       style={{
-        background: colors.background,
+        background: colors.backgroundColor,
         border: `1px solid ${colors.border}`,
         borderRadius: 16,
         padding: 24,

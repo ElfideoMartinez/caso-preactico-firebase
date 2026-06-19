@@ -11,7 +11,7 @@ function Input(props: InputProps) {
         padding: "12px 16px",
         borderRadius: 12,
         border: `1px solid ${colors.border}`,
-        backgroundColor: colors.background,
+        backgroundColor: colors.backgroundColor,
         color: colors.text,
         outline: "none",
         fontSize: 16,

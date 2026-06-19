@@ -18,18 +18,6 @@ type ButtonProps = {
   onClick?: () => Promise<void> | void;
   variant?: ButtonVariant;
 };
-interface ButtonStyles {
-  backgroundColor: string;
-  color: string;
-  border: string;
-  padding: string;
-  borderRadius: string;
-  cursor: string;
-  display: string;
-  alignItems: string;
-  justifyContent: string;
-  text?: string;
-}
 
 function Button({
   children,
@@ -38,7 +26,7 @@ function Button({
   variant = "primaryButton",
 }: ButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const styles: ButtonStyles = colors[variant];
+  const styles = colors[variant];
   return (
     <button
       onClick={async () => {

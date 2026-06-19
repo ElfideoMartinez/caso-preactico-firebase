@@ -10,7 +10,7 @@ function Header({ onToggleSidebar }: HeaderProps) {
     <header
       style={{
         height: 70,
-        background: colors.background,
+        background: colors.backgroundColor,
         borderBottom: `1px solid ${colors.border}`,
         display: "flex",
         alignItems: "center",

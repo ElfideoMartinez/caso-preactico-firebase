@@ -20,7 +20,6 @@ const PedidosPage = () => {
     if (!user?.uid) return;
 
     const unsubscribe = getUserOrdersRTDB(userData?.uid, (orders) => {
-      console.log("Orders updated:", orders);
       setUserOrders(orders);
     });
 

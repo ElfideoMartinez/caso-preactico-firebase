@@ -34,6 +34,5 @@ export const getProducts = async () => {
     salePrice: product.salePrice,
     imageUrl: product.imageUrl ? `${storageUrl}${product.imageUrl}` : null,
   }));
-  console.log("Products fetched and formatted:", formattedProducts);
   return formattedProducts;
 };
