@@ -1,14 +1,17 @@
+interface UpdateProfileParams {
+  uid: string;
+  displayName?: string;
+  email?: string;
+  newPhotoFile?: string;
+  role?: string;
+}
 export const updateProfile = async ({
   uid,
   displayName,
   email,
   newPhotoFile,
-}: {
-  uid: string;
-  displayName?: string;
-  email?: string;
-  newPhotoFile?: string;
-}) => {
+  role,
+}: UpdateProfileParams) => {
   try {
     const reponse = await fetch(
       `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}editUser`,
@@ -22,6 +25,7 @@ export const updateProfile = async ({
           displayName,
           email,
           newPhotoFile,
+          role,
         }),
       },
     );

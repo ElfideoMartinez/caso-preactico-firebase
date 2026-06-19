@@ -53,25 +53,26 @@ function ProductCard({
   }, [imageUrl]);
 
   return (
-    <Card style={{ width: "max-content", minWidth: 300, margin: 16 }}>
+    <Card style={{ minWidth: 300, margin: 16 }}>
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           gap: 16,
-          width: "max-content",
+          width: "100%",
         }}
       >
         <div
           style={{
-            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <img
             src={imageSrc}
             alt={name}
             style={{
-              width: "100%",
               height: 220,
               objectFit: "cover",
               borderRadius: 12,
