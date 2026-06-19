@@ -10,6 +10,7 @@ interface OrdersBodyProps {
 }
 
 const OrdersBody = ({ orders }: OrdersBodyProps) => {
+  console.log("OrdersBody received orders:", orders);
   const statusColors: { [key: string]: string } = {
     pending: colors.warning,
     active: colors.success,
@@ -57,9 +58,17 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
                 <Text>Productos:</Text>
                 <>
                   {item.cart.map((product: any, idx: number) => (
-                    <div key={idx}>
-                      {product.name} - ${product.price.toFixed(2)} x{" "}
-                      {product.quantity}
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: spacing.sm,
+                        padding: spacing.sm,
+                      }}
+                      key={idx}
+                    >
+                      {product.name} - ${product.price} X {product.quantity} = $
+                      {product.subtotal}
                       {product.description && (
                         <Text size={typography.small}>
                           {product.description}

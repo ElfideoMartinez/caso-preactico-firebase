@@ -1,15 +1,17 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
-import { getUserCart, addToCart } from "../services/firebase/users";
+import { addToCart, getUserData } from "../services/firebase/users";
 
 type CartContextType = {
   cart: any[];
+  userData: any;
   refreshCart: () => Promise<void>;
   addItem: (productId: string, name: string, price: number) => Promise<void>;
 };
 
 const CartContext = createContext<CartContextType>({
   cart: [],
+  userData: null,
   refreshCart: async () => {},
   addItem: async () => {},
 });
@@ -17,14 +19,16 @@ const CartContext = createContext<CartContextType>({
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   const [cart, setCart] = useState<any[]>([]);
+  const [userData, setUserData] = useState<any>(null);
 
   const refreshCart = async () => {
     if (!user) {
       setCart([]);
       return;
     }
-    const data = await getUserCart(user.uid);
-    setCart(data || []);
+    const data = await getUserData(user.uid);
+    setUserData(data);
+    setCart(data.cart || []);
   };
 
   useEffect(() => {
@@ -41,6 +45,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     <CartContext.Provider
       value={{
         cart,
+        userData,
         refreshCart,
         addItem,
       }}

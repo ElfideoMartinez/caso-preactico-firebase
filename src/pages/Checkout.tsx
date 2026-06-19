@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Card from "../components/cards/Card";
 import Text from "../components/typography/Text";
 import { typography } from "../constants/typography";
@@ -9,24 +9,20 @@ import { addNewOrder } from "../services/firebase/users";
 import { useAuth } from "../contexts/AuthContext";
 import { addNewOrderRTDB } from "../services/firebase/realtimeDataBase";
 import Swal from "sweetalert2";
+import { useCart } from "../contexts/CartContext";
 
 const Checkout = () => {
   const { user } = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
-  const { cart } = location.state || {};
-  const userTotal =
-    cart?.reduce(
-      (total: number, item: any) => total + item.price * item.quantity,
-      0,
-    ) || 0;
+  const { cart } = useCart();
+  const total = cart.reduce((sum, item) => sum + item?.sellingPrice, 0);
   const handleCheckout = async () => {
     try {
       console.log(
         "Processing checkout with cart data:",
         cart,
         "and total:",
-        userTotal,
+        total,
       );
       if (!user || !user.uid) {
         Swal.fire({
@@ -36,10 +32,10 @@ const Checkout = () => {
         });
         return;
       }
-      await addNewOrder(user.uid, userTotal, cart);
+      await addNewOrder(user.uid, total, cart);
       await addNewOrderRTDB({
         cart,
-        total: userTotal,
+        total: total,
         timestamp: new Date().toISOString(),
         status: "pending",
         userId: user.uid,
@@ -90,7 +86,9 @@ const Checkout = () => {
               <CartItem key={index} item={item} />
             ))}
             <Text style={{ alignSelf: "self-end" }} size={typography.h2}>
-              Total: ${userTotal.toFixed(2)}
+              {cart
+                .reduce((total, item) => total + item?.sellingPrice, 0)
+                .toFixed(2)}
             </Text>
             <Button onClick={handleCheckout}>Realizar Orden</Button>
           </div>

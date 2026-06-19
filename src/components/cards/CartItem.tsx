@@ -15,7 +15,7 @@ const CartItem = ({ item }: { children?: React.ReactNode; item: any }) => {
           alignItems: "center",
         }}
       >
-        <Text>${item.subtotal.toFixed(2)}</Text>
+        <Text>${item.sellingPrice.toFixed(2)}</Text>
       </div>
     </Card>
   );

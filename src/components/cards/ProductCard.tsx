@@ -218,4 +218,4 @@ function ProductCard({
   );
 }
 
-export default useMemo(() => ProductCard, []);
+export default ProductCard;
