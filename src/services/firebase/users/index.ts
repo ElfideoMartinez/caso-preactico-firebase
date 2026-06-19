@@ -4,6 +4,7 @@ interface User {
   displayName: string | null;
   photoURL: string | null;
   role?: string;
+  signInMethod?: string;
 }
 export const addNewUser = async (user: User) => {
   const response = await fetch(

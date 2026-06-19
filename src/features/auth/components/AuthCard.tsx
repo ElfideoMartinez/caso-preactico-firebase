@@ -89,7 +89,7 @@ function AuthCard() {
                 const user = await login(formData.email, formData.password);
                 console.log("User logged in:", user);
               }
-              navigate("/dashboard");
+              navigate("/productos");
             } catch (error) {
               console.error("Authentication error:", error);
             }
@@ -114,15 +114,15 @@ function AuthCard() {
           onClick={async () => {
             try {
               const user = await loginWithGoogle();
-              console.log("User logged in with Google:", user);
               await addNewUser({
                 uid: user.user.uid,
                 email: user.user.email,
                 displayName: user.user.displayName,
                 photoURL: user.user.photoURL,
+                signInMethod: "google",
               });
 
-              navigate("/dashboard");
+              navigate("/productos");
             } catch (error) {
               console.error("Authentication error:", error);
             }

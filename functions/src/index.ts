@@ -28,3 +28,4 @@ export { addToCart } from "./features/users/addToCart";
 export { getUserCart } from "./features/users/getUserCart";
 export { editProduct } from "./features/products/editProduct";
 export { placeNewOrder } from "./features/orders/PlaceNewOrder";
+export { editUser } from "./features/users/editUser";

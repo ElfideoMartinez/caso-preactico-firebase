@@ -10,7 +10,6 @@ interface OrdersBodyProps {
 }
 
 const OrdersBody = ({ orders }: OrdersBodyProps) => {
-  console.log("OrdersBody received orders:", orders);
   const statusColors: { [key: string]: string } = {
     pending: colors.warning,
     active: colors.success,

@@ -1,6 +1,10 @@
+import { useEffect, useState } from "react";
 import { spacing } from "../../constants/spacing";
 import Card from "../cards/Card";
 import Text from "../typography/Text";
+import { getStorageRef } from "../../services/firebase/storage/storageService";
+import { getDownloadURL } from "firebase/storage";
+import { useAuth } from "../../contexts/AuthContext";
 interface OrdersHeaderProps {
   user: {
     displayName: string | null;
@@ -11,11 +15,29 @@ interface OrdersHeaderProps {
 }
 
 const OrdersHeader = ({ user }: OrdersHeaderProps) => {
+  const [userPhotoURL, setUserPhotoURL] = useState<string | null>(
+    user?.photoURL || null,
+  );
+  const { user: authUser } = useAuth();
+  useEffect(() => {
+    const fetchUserPhotoURL = async () => {
+      if (user?.photoURL) {
+        const storageRef = getStorageRef(user.photoURL);
+        const downloadURL = await getDownloadURL(storageRef);
+        setUserPhotoURL(downloadURL);
+      }
+    };
+    fetchUserPhotoURL();
+  }, [user]);
   return (
     <Card>
       <div style={{ display: "flex", alignItems: "center", gap: spacing.md }}>
         <img
-          src={user?.photoURL || "https://via.placeholder.com/80"}
+          src={
+            userPhotoURL ||
+            authUser?.photoURL ||
+            "https://via.placeholder.com/80"
+          }
           alt='User Avatar'
           style={{ width: 80, height: 80, borderRadius: "100%" }}
         />

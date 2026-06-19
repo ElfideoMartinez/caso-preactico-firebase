@@ -5,10 +5,12 @@ import OrdersBody from "../components/orders/OrdersBody";
 import { spacing } from "../constants/spacing";
 import Text from "../components/typography/Text";
 import { getUserOrdersRTDB } from "../services/firebase/realtimeDataBase";
+import { useCart } from "../contexts/CartContext";
 
 const PedidosPage = () => {
   const { user, loading } = useAuth();
-  const [userData, setUserData] = useState<any>(null);
+  const { userData } = useCart();
+  const [userOrders, setUserOrders] = useState<any>(null);
 
   useEffect(() => {
     document.title = "Pedidos - Innovate Solutions";
@@ -16,9 +18,9 @@ const PedidosPage = () => {
   useEffect(() => {
     if (!user?.uid) return;
 
-    const unsubscribe = getUserOrdersRTDB(user.uid, (orders) => {
+    const unsubscribe = getUserOrdersRTDB(userData?.uid, (orders) => {
       console.log("Orders updated:", orders);
-      setUserData(orders);
+      setUserOrders(orders);
     });
 
     return () => unsubscribe();
@@ -37,8 +39,8 @@ const PedidosPage = () => {
         padding: spacing.lg,
       }}
     >
-      <OrdersHeader user={user as any} />
-      <OrdersBody orders={userData || []} />
+      <OrdersHeader user={userData as any} />
+      <OrdersBody orders={userOrders || []} />
     </div>
   );
 };

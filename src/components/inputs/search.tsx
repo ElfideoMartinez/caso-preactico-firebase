@@ -17,6 +17,8 @@ const Search = ({ searchTerm, setSearchTerm }: SearchProps) => {
       value={searchTerm}
       onChange={handleSearch}
       style={{
+        marginTop: spacing.lg,
+        maxWidth: 400,
         padding: spacing.sm,
         borderRadius: spacing.sm,
         border: `1px solid ${colors.border}`,

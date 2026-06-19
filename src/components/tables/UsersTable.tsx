@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import Text from "../typography/Text";
+import { spacing } from "../../constants/spacing";
+import { colors } from "../../constants/colors";
 
 const UsersTable = ({
   searchTerm,
@@ -12,27 +14,45 @@ const UsersTable = ({
     document.title = "Usuarios - Innovate Solutions";
   }, []);
   useEffect(() => {
-    // Aquí podrías agregar lógica para filtrar los usuarios según el searchTerm
-    console.log("Search term updated:", searchTerm);
+    console.log("Search term updated:", users);
   }, [searchTerm]);
   if (users.length === 0) {
     return <Text>No se encontraron usuarios.</Text>;
   }
   return (
-    <table>
-      <thead>
+    <table
+      style={{
+        border: `1px solid ${colors.border}`,
+        width: "100%",
+        borderCollapse: "collapse",
+        gap: spacing.md,
+        marginTop: spacing.lg,
+        marginBottom: spacing.lg,
+        borderRadius: spacing.sm,
+      }}
+    >
+      <thead style={{ backgroundColor: colors.primaryLight }}>
         <tr>
-          <th style={{ textAlign: "left" }}>Nombre</th>
-          <th style={{ textAlign: "left" }}>Email</th>
-          <th style={{ textAlign: "left" }}>Rol</th>
+          <th style={{ textAlign: "left", padding: spacing.md }}>Nombre</th>
+          <th style={{ textAlign: "left", padding: spacing.md }}>Email</th>
+          <th style={{ textAlign: "left", padding: spacing.md }}>Rol</th>
         </tr>
       </thead>
       <tbody>
         {users.map((user, index) => (
-          <tr key={index}>
-            <td style={{ textAlign: "left" }}>{user.displayName}</td>
-            <td style={{ textAlign: "left" }}>{user.email}</td>
-            <td style={{ textAlign: "left" }}>{user.role}</td>
+          <tr
+            key={index}
+            style={{ borderBottom: `1px solid ${colors.border}` }}
+          >
+            <td style={{ textAlign: "left", padding: spacing.sm }}>
+              {user.displayName}
+            </td>
+            <td style={{ textAlign: "left", padding: spacing.sm }}>
+              {user.email}
+            </td>
+            <td style={{ textAlign: "left", padding: spacing.sm }}>
+              {user.role}
+            </td>
           </tr>
         ))}
       </tbody>

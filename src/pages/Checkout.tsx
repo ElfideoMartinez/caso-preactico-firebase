@@ -15,7 +15,10 @@ const Checkout = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { cart } = useCart();
-  const total = cart.reduce((sum, item) => sum + item?.sellingPrice, 0);
+  const total = cart.reduce(
+    (sum, item) => sum + item.sellingPrice * item.quantity,
+    0,
+  );
   const handleCheckout = async () => {
     try {
       console.log(
@@ -86,9 +89,7 @@ const Checkout = () => {
               <CartItem key={index} item={item} />
             ))}
             <Text style={{ alignSelf: "self-end" }} size={typography.h2}>
-              {cart
-                .reduce((total, item) => total + item?.sellingPrice, 0)
-                .toFixed(2)}
+              {`Total: $${total.toFixed(2)}`}
             </Text>
             <Button onClick={handleCheckout}>Realizar Orden</Button>
           </div>

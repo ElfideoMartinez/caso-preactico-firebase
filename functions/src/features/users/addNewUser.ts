@@ -15,6 +15,7 @@ export const addNewUser = onRequest({ cors: true }, async (req, res) => {
       cart: [],
       uid: req.body.uid,
       role: userRole,
+      signInMethod: req.body.signInMethod || "email",
     };
     //check users collection for existing user with the same email
     const existingUserQuery = await db

@@ -5,30 +5,17 @@ import { useNavigate } from "react-router-dom";
 import Button from "../buttons/Button";
 import CustomModal from "../modals/CustomModal";
 import Text from "../typography/Text";
-import { getUserCart } from "../../services/firebase/users";
-import { useAuth } from "../../contexts/AuthContext";
 import { useCart } from "../../contexts/CartContext";
 import CartItem from "../cards/CartItem";
 
 function UserMenu() {
-  const { user } = useAuth();
-  const { cart: userCart } = useCart();
+  const { cart } = useCart();
   useEffect(() => {
     document.title = "User Menu - Innovate Solutions";
   }, []);
   useEffect(() => {
-    const fetchUserData = async () => {
-      if (user) {
-        try {
-          const data = await getUserCart(user.uid);
-          console.log("User cart data:", data);
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
-      }
-    };
-    fetchUserData();
-  }, [user]);
+    console.log("Cart updated:", cart);
+  }, [cart]);
   const navigate = useNavigate();
   const [open, setOpen] = useState("");
 
@@ -96,10 +83,10 @@ function UserMenu() {
           isOpen={open === "cart"}
           onClose={() => setOpen("")}
         >
-          {userCart.length === 0 ? (
+          {cart.length === 0 ? (
             <Text>No hay productos en el carrito.</Text>
           ) : (
-            userCart.map((item, index) => <CartItem key={index} item={item} />)
+            cart.map((item, index) => <CartItem key={index} item={item} />)
           )}
           <div
             style={{
@@ -110,14 +97,17 @@ function UserMenu() {
           >
             <Text size={18} weight={600}>
               Total: $
-              {userCart
-                .reduce((total, item) => total + item?.sellingPrice, 0)
+              {cart
+                .reduce(
+                  (total, item) => total + item.sellingPrice * item.quantity,
+                  0,
+                )
                 .toFixed(2)}
             </Text>
           </div>
           <Button
             onClick={() => {
-              navigate("/checkout", { state: { cart: userCart } });
+              navigate("/checkout", { state: { cart: cart } });
               setOpen("");
             }}
           >
