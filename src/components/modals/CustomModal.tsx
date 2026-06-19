@@ -26,7 +26,7 @@ export default function CustomModal({
           flexDirection: "column",
           maxHeight: "max-content",
           maxWidth: "max-content",
-          margin: "auto",
+          marginLeft: "auto",
           borderRadius: "12px",
           padding: "24px",
           gap: "16px",

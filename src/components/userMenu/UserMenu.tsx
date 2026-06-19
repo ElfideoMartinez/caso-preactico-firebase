@@ -55,9 +55,6 @@ function UserMenu() {
             >
               Profile
             </button>
-
-            <button style={menuStyle}>Settings</button>
-
             <button
               style={{
                 ...menuStyle,
