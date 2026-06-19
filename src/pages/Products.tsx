@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { getProducts } from "../services/firebase/products";
 import ProductCard from "../components/cards/ProductCard";
 import Text from "../components/typography/Text";
@@ -10,15 +9,13 @@ const Products = () => {
   useEffect(() => {
     document.title = "Productos - Innovate Solutions";
   }, []);
+  const fetchProducts = async () => {
+    const response = await getProducts();
+    setProducts(response);
+  };
   useEffect(() => {
-    const fetchProducts = async () => {
-      // Aquí iría la lógica para obtener los productos desde Firebase
-      const response = await getProducts();
-      console.log("Productos obtenidos:", response);
-      setProducts(response);
-    };
     fetchProducts();
-  }, []);
+  });
   return (
     <>
       <Text size={typography.h1} weight={700}>

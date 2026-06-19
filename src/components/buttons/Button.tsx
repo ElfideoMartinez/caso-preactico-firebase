@@ -3,16 +3,33 @@ import { colors } from "../../constants/colors";
 import Text from "../typography/Text";
 import { ClipLoader } from "react-spinners";
 
+type ButtonVariant = Extract<
+  keyof typeof colors,
+  | "primaryButton"
+  | "warningLightButton"
+  | "lightButtonVariant"
+  | "greenButtonVariant"
+  | "disabledButtonVariant"
+>;
+
 type ButtonProps = {
   disabled?: boolean;
   children: React.ReactNode;
   onClick?: () => Promise<void> | void;
-  variant?:
-    | "primaryButton"
-    | "greenButtonVariant"
-    | "warningLightButton"
-    | "lightButtonVariant";
+  variant?: ButtonVariant;
 };
+interface ButtonStyles {
+  backgroundColor: string;
+  color: string;
+  border: string;
+  padding: string;
+  borderRadius: string;
+  cursor: string;
+  display: string;
+  alignItems: string;
+  justifyContent: string;
+  text?: string;
+}
 
 function Button({
   children,
@@ -21,7 +38,7 @@ function Button({
   variant = "primaryButton",
 }: ButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const styles = colors[variant as keyof typeof colors] || colors.primary;
+  const styles: ButtonStyles = colors[variant];
   return (
     <button
       onClick={async () => {
@@ -40,7 +57,7 @@ function Button({
       {isLoading ? (
         <ClipLoader color='#fff' size={20} />
       ) : (
-        <Text color={"#fff"}>{children}</Text>
+        <Text color={styles.text}>{children}</Text>
       )}
     </button>
   );

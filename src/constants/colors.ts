@@ -72,6 +72,12 @@ export const colors = {
     background: "#22C55E",
     hover: "#16A34A",
     text: "#FFFFFF",
+    borderRadius: 12,
+    padding: "12px 20px",
+    fontSize: 16,
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "0.2s",
   },
   disabledButtonVariant: {
     background: "#E2E8F0",

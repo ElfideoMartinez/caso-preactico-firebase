@@ -4,12 +4,17 @@ import OrderCard from "./OrderCard";
 import { typography } from "../../constants/typography";
 import { colors } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
+import { useCart } from "../../contexts/CartContext";
+import Button from "../buttons/Button";
+import Swal from "sweetalert2";
 
 interface OrdersBodyProps {
   orders: any[];
 }
 
 const OrdersBody = ({ orders }: OrdersBodyProps) => {
+  console.log("Orders in OrdersBody:", orders);
+  const { role } = useCart().userData || {};
   const statusColors: { [key: string]: string } = {
     pending: colors.warning,
     active: colors.success,
@@ -97,11 +102,74 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
                   ))}
                 </>
               </div>
+              {role === "admin" && (
+                <AdminOrdersBody orderId={item.id} status={item.status} />
+              )}
             </OrderCard>
           ))}
         </div>
       )}
     </Card>
+  );
+};
+interface AdminOrdersBodyProps {
+  orderId: any;
+  status?: string;
+}
+const AdminOrdersBody = ({ orderId, status }: AdminOrdersBodyProps) => {
+  const statusColors: { [key: string]: string } = {
+    pending: colors.warning,
+    active: colors.success,
+    cancelled: colors.danger,
+    completed: colors.primary,
+  };
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-evenly",
+        marginRight: spacing.lg,
+        marginTop: spacing.lg,
+        borderTop: `1px solid ${colors.border}`,
+        paddingTop: spacing.lg,
+      }}
+    >
+      <Button
+        variant='greenButtonVariant'
+        onClick={async () => {
+          await Swal.fire(
+            "Funcionalidad no implementada",
+            `Esta funcionalidad aún no está implementada para la orden ${orderId}.`,
+            "info",
+          );
+        }}
+      >
+        Marcar como Activa
+      </Button>
+      <Button
+        onClick={async () => {
+          await Swal.fire(
+            "Funcionalidad no implementada",
+            "Esta funcionalidad aún no está implementada.",
+            "info",
+          );
+        }}
+      >
+        Filtrar por Status
+      </Button>
+      <Button
+        onClick={async () => {
+          await Swal.fire(
+            "Funcionalidad no implementada",
+            "Esta funcionalidad aún no está implementada.",
+            "info",
+          );
+        }}
+      >
+        Filtrar por Fecha
+      </Button>
+    </div>
   );
 };
 

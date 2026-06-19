@@ -41,7 +41,7 @@ const PedidosPage = () => {
       }}
     >
       <Text size={typography.h1} weight={700}>
-        User Information
+        Pedidos
       </Text>
       <OrdersHeader user={userData as any} />
       <OrdersBody orders={userOrders || []} />

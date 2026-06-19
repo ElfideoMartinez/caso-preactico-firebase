@@ -16,13 +16,13 @@ const Inventory = () => {
     document.title = "Inventario - Innovate Solutions";
   }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
   const fetchData = async () => {
     const response = await getProducts();
     setData(response);
   };
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <Card style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div
