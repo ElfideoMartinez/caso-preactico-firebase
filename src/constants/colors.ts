@@ -105,5 +105,6 @@ export const colors = {
     success: "linear-gradient(135deg, #DFF0D1 0%, #BFE09E 100%)",
     warning: "linear-gradient(135deg, #FFF6CC 0%, #F5DD8A 100%)",
     danger: "linear-gradient(135deg, #FFE2DB 0%, #F4B8AA 100%)",
+    lightButtonVariant: "linear-gradient(135deg, #FFFFFF 0%, #F8FAF2 100%)",
   },
 };

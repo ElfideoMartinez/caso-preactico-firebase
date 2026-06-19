@@ -9,7 +9,7 @@ const OrderCard = ({
   variant = "pending",
 }: {
   children?: React.ReactNode;
-  variant?: "pending" | "active" | "cancelled" | "completed";
+  variant?: "pending" | "active" | "cancelled" | "completed" | "light";
 }) => {
   const cardStyles = {
     pending: {
@@ -27,6 +27,10 @@ const OrderCard = ({
     completed: {
       background: colors.softGradients.primary,
       border: `1px solid ${colors.primary}`,
+    },
+    light: {
+      background: colors.softGradients.lightButtonVariant,
+      border: `1px solid ${colors.lightButtonVariant.border}`,
     },
   };
   return (

@@ -9,12 +9,17 @@ import Button from "../buttons/Button";
 import Swal from "sweetalert2";
 import type { ButtonVariant } from "../buttons/Button";
 import { updateOrderStatusRTDB } from "../../services/firebase/realtimeDataBase";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
+import { editProduct } from "../../services/firebase/products/EditProduct";
 
 interface OrdersBodyProps {
   orders: any[];
 }
 
 const OrdersBody = ({ orders }: OrdersBodyProps) => {
+  const [openCardIndex, setOpenCardIndex] = useState<number | null>(null);
   const { role } = useCart().userData || {};
   const statusColors: { [key: string]: string } = {
     pending: colors.warning,
@@ -31,7 +36,7 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
           style={{ display: "flex", flexDirection: "column", gap: spacing.md }}
         >
           {orders.map((item, index) => (
-            <OrderCard key={index} variant={item.status}>
+            <OrderCard key={index} variant={"light"}>
               <div
                 style={{
                   display: "flex",
@@ -78,30 +83,63 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
                 <Text>{new Date(item.timestamp).toLocaleString()}</Text>
               </div>
               <div style={{ marginTop: 10 }}>
-                <Text weight={700}>Productos:</Text>
-                <>
-                  {item.cart?.map((product: any, idx: number) => (
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: spacing.sm,
-                        padding: spacing.sm,
-                      }}
-                      key={idx}
-                    >
-                      <Text>
-                        {product.name} - ${product.price} X {product.quantity} =
-                        ${product.subtotal?.toFixed(2) || "0.00"}
-                      </Text>
-                      {product.description && (
-                        <Text size={typography.small}>
-                          {product.description}
+                <div
+                  onClick={() => {
+                    setOpenCardIndex(openCardIndex === index ? null : index);
+                  }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: spacing.xs,
+                    cursor: "pointer",
+                  }}
+                >
+                  <FontAwesomeIcon
+                    style={{ margin: spacing.sm }}
+                    icon={openCardIndex === index ? faChevronUp : faChevronDown}
+                  />
+                  <Text weight={700}>Productos({item.cart?.length || 0}):</Text>
+                </div>
+                {openCardIndex === index && (
+                  <>
+                    {item.cart?.map((product: any, idx: number) => (
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: spacing.sm,
+                          padding: spacing.sm,
+                        }}
+                        key={idx}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: spacing.sm,
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text size={typography.body} weight={600}>
+                            {product.name}
+                            {product.quantity} =
+                          </Text>
+                          <Text size={typography.body}>
+                            ${product.sellingPrice * product.quantity}
+                          </Text>
+                        </div>
+
+                        <Text size={typography.small} color={colors.black}>
+                          ${product.sellingPrice} * {product.quantity}
                         </Text>
-                      )}
-                    </div>
-                  ))}
-                </>
+                        {product.description && (
+                          <Text size={typography.small}>
+                            {product.description}
+                          </Text>
+                        )}
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
               {role === "admin" && (
                 <AdminOrdersBody orderId={item.id} status={item.status} />
@@ -136,6 +174,7 @@ const AdminOrdersBody = ({
         icon: "check",
         function: async () => {
           await updateOrderStatusRTDB(orderId, "active");
+          await editProduct(orderId, "stock", "decrement");
           Swal.fire(
             "Exito",
             `La orden ${orderId} ha sido marcada como activa exitosamente.`,
