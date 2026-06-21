@@ -115,24 +115,6 @@ function ProductCard({
               SALE
             </div>
           )}
-
-          {outOfStock && (
-            <div
-              style={{
-                position: "absolute",
-                top: 12,
-                right: 12,
-                background: colors.secondary,
-                color: colors.white,
-                padding: "6px 12px",
-                borderRadius: 20,
-                fontWeight: 600,
-                fontSize: 13,
-              }}
-            >
-              OUT OF STOCK
-            </div>
-          )}
         </div>
 
         <div
@@ -184,7 +166,7 @@ function ProductCard({
                 fontWeight: 600,
               }}
             >
-              Currently unavailable
+              No hay stock disponible
             </div>
           ) : (
             onSale && (

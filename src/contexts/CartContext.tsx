@@ -33,7 +33,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
     const data = await getUserData(user.uid);
     setUserData(data);
-    setCart(data.cart || []);
+    setCart(data?.cart || []);
   };
 
   useEffect(() => {

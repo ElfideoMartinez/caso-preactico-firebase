@@ -3,8 +3,7 @@ import { rtdb } from "./firebaseApp";
 
 export const addNewOrderRTDB = async (orderData: any) => {
   try {
-    const newName = `order_${new Date().getTime()}`;
-    const productRef = ref(rtdb, `orders/${newName}`);
+    const productRef = ref(rtdb, `orders/${orderData.orderDatabaseId}`);
     await set(productRef, orderData);
   } catch (error) {
     console.error("Error adding new order: ", error);

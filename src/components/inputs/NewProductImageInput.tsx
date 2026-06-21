@@ -63,9 +63,14 @@ const NewProductImageInput = ({
         accept='image/*'
         onChange={(e) => {
           if (e.target.files && e.target.files[0]) {
-            setSelectedFile(e.target.files[0]);
+            const file = e.target.files[0];
+            const fileName = file.name.replace(/\s+/g, "_");
+            const newFile = new File([file], fileName, { type: file.type });
+            setSelectedFile(newFile);
             if (handleImageUpload) {
-              handleImageUpload(e.target.files[0]);
+              handleImageUpload(newFile).catch((error) => {
+                console.error("Error uploading image: ", error);
+              });
             }
           }
         }}

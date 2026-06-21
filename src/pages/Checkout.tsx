@@ -35,13 +35,14 @@ const Checkout = () => {
         });
         return;
       }
-      await addNewOrder(user.uid, total, cart);
+      const newOrder = await addNewOrder(user.uid, total, cart);
       await addNewOrderRTDB({
         cart,
         total: total,
         timestamp: new Date().toISOString(),
         status: "pending",
         userId: user.uid,
+        orderDatabaseId: newOrder.orderId,
       });
       Swal.fire({
         icon: "success",

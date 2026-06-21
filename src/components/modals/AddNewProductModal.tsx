@@ -74,7 +74,7 @@ const AddNewProductModal = ({
         <Card style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <NewProductImageInput
             handleImageUpload={async (file) => {
-              const storageRef = getStorageRef(`/productss/${file.name}`);
+              const storageRef = getStorageRef(`/products/${file.name}`);
               const imageUrl = await uploadFile(file, storageRef.fullPath);
               setFormData({
                 ...formData,

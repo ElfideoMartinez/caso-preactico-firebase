@@ -15,7 +15,7 @@ export const addNewOrder = async (
       },
     );
     const result = await response.json();
-    return result.data;
+    return result;
   } catch (error) {
     console.error("Error adding new order:", error);
     throw error;

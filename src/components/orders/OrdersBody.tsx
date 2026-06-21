@@ -27,6 +27,12 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
     cancelled: colors.danger,
     completed: colors.primary,
   };
+  console.log(
+    "OrdersBody rendered with orders:",
+    orders,
+    "and user role:",
+    role,
+  );
   return (
     <Card>
       {orders.length === 0 ? (
@@ -142,7 +148,7 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
                 )}
               </div>
               {role === "admin" && (
-                <AdminOrdersBody orderId={item.uid} status={item.status} />
+                <AdminOrdersBody orderId={item.id} status={item.status} />
               )}
             </OrderCard>
           ))}
@@ -173,7 +179,7 @@ const AdminOrdersBody = ({
         color: statusColors[status as OrderStatus],
         icon: "check",
         function: async () => {
-          // await updateOrderStatusRTDB(orderId, "active");
+          await updateOrderStatusRTDB(orderId, "active");
           await addRemoveInventory(orderId, "decrement");
           Swal.fire(
             "Exito",
