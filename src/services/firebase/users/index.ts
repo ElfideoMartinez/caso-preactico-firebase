@@ -6,6 +6,27 @@ interface User {
   role?: string;
   signInMethod?: string;
 }
+export const createUser = async (user: {
+  email: string;
+  displayName: string;
+  role: string;
+}) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}createUser`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    },
+  );
+  const result = await response.json();
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || result.error || "Failed to create user");
+  }
+  return result;
+};
 export const addNewUser = async (user: User) => {
   const response = await fetch(
     `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}addNewUser`,

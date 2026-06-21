@@ -22,6 +22,7 @@ setGlobalOptions({ maxInstances: 10 });
 export { addNewProduct } from "./features/products/addNewProduct";
 export { getProducts } from "./features/products/getProducts";
 export { addNewUser } from "./features/users/addNewUser";
+export { createUser } from "./features/users/createUser";
 export { getUserData } from "./features/users/getUserData";
 export { getAllUsers } from "./features/users/getAllUsers";
 export { addToCart } from "./features/users/addToCart";

@@ -4,9 +4,9 @@ import { typography } from "../../constants/typography";
 import Input from "../inputs/Input";
 import Select from "../inputs/Select";
 import Button from "../buttons/Button";
-import { register, resetPassword } from "../../services/firebase/authServices";
+import { resetPassword } from "../../services/firebase/authServices";
 import { useState } from "react";
-import { addNewUser } from "../../services/firebase/users";
+import { createUser } from "../../services/firebase/users";
 import { colors } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
 import Swal from "sweetalert2";
@@ -16,15 +16,6 @@ interface AddNewUserModalProps {
   onRequestClose: () => void;
   onUserAdded?: () => void | Promise<void>;
 }
-const generateRandomPassword = () => {
-  const chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
-  let password = "";
-  for (let i = 0; i < 12; i++) {
-    password += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return password;
-};
 
 const AddNewUserModal = ({
   isOpen,
@@ -42,19 +33,13 @@ const AddNewUserModal = ({
   );
   const handleAddNewUser = async () => {
     try {
-      const newPassword = generateRandomPassword();
       setIsLoading(true);
-      const { user } = await register(formData.email, newPassword);
-      await addNewUser({
-        uid: user.uid,
-        displayName: formData.name,
+      await createUser({
         email: formData.email,
+        displayName: formData.name,
         role: formData.role,
-        photoURL: user.photoURL,
       });
-      if (formData.email) {
-        await resetPassword(formData.email);
-      }
+      await resetPassword(formData.email);
       await onUserAdded?.();
       setFormData({ name: "", email: "", role: "" });
       onRequestClose();
