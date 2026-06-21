@@ -18,140 +18,206 @@ interface OrdersBodyProps {
   orders: any[];
 }
 
+const statusStyles: {
+  [key: string]: { bg: string; color: string; label: string };
+} = {
+  pending: {
+    bg: colors.warningLight,
+    color: colors.warning,
+    label: "Pendiente",
+  },
+  active: { bg: colors.successLight, color: colors.success, label: "Activa" },
+  cancelled: {
+    bg: colors.dangerLight,
+    color: colors.danger,
+    label: "Cancelada",
+  },
+  completed: {
+    bg: colors.surfaceHover,
+    color: colors.primary,
+    label: "Completada",
+  },
+};
+
 const OrdersBody = ({ orders }: OrdersBodyProps) => {
   const [openCardIndex, setOpenCardIndex] = useState<number | null>(null);
   const { role } = useCart().userData || {};
-  const statusColors: { [key: string]: string } = {
-    pending: colors.warning,
-    active: colors.success,
-    cancelled: colors.danger,
-    completed: colors.primary,
-  };
-  console.log(
-    "OrdersBody rendered with orders:",
-    orders,
-    "and user role:",
-    role,
-  );
   return (
     <Card>
       {orders.length === 0 ? (
-        <Text>No hay órdenes.</Text>
+        <Text color={colors.textSecondary}>No hay órdenes todavía.</Text>
       ) : (
         <div
           style={{ display: "flex", flexDirection: "column", gap: spacing.md }}
         >
-          {orders.map((item, index) => (
-            <OrderCard key={index} variant={"light"}>
-              <div
-                style={{
-                  display: "flex",
-                  gap: spacing.sm,
-                  alignItems: "center",
-                }}
-              >
-                <Text weight={700}>Id:</Text>
-                <Text color={colors.primary}>{item.id}</Text>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  gap: spacing.sm,
-                  alignItems: "center",
-                }}
-              >
-                <Text weight={700}>Status:</Text>
-                <Text
-                  color={statusColors[item.status]}
-                  style={{ textTransform: "capitalize" }}
-                >
-                  {item.status}
-                </Text>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  gap: spacing.sm,
-                  alignItems: "center",
-                }}
-              >
-                <Text weight={700}>Total:</Text>
-                <Text>${item.total?.toFixed(2) || "0.00"}</Text>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  gap: spacing.sm,
-                  alignItems: "center",
-                }}
-              >
-                <Text weight={700}>Fecha:</Text>
-                <Text>{new Date(item.timestamp).toLocaleString()}</Text>
-              </div>
-              <div style={{ marginTop: 10 }}>
+          {orders.map((item, index) => {
+            const badge = statusStyles[item.status] || statusStyles.pending;
+            const isOpen = openCardIndex === index;
+            return (
+              <OrderCard key={index} variant={"light"}>
                 <div
-                  onClick={() => {
-                    setOpenCardIndex(openCardIndex === index ? null : index);
-                  }}
                   style={{
                     display: "flex",
-                    alignItems: "center",
-                    gap: spacing.xs,
-                    cursor: "pointer",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    gap: spacing.md,
+                    flexWrap: "wrap",
                   }}
                 >
-                  <FontAwesomeIcon
-                    style={{ margin: spacing.sm }}
-                    icon={openCardIndex === index ? faChevronUp : faChevronDown}
-                  />
-                  <Text weight={700}>Productos({item.cart?.length || 0}):</Text>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: spacing.xs,
+                    }}
+                  >
+                    <span
+                      style={{
+                        alignSelf: "flex-start",
+                        background: badge.bg,
+                        color: badge.color,
+                        padding: "4px 12px",
+                        borderRadius: 999,
+                        fontSize: typography.small,
+                        fontWeight: 700,
+                      }}
+                    >
+                      {badge.label}
+                    </span>
+                    <Text size={typography.small} color={colors.textSecondary}>
+                      {new Date(item.timestamp).toLocaleString()}
+                    </Text>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <Text size={typography.small} color={colors.textSecondary}>
+                      Total
+                    </Text>
+                    <Text
+                      size={typography.h2}
+                      weight={700}
+                      color={colors.primary}
+                    >
+                      ${item.total?.toFixed(2) || "0.00"}
+                    </Text>
+                  </div>
                 </div>
-                {openCardIndex === index && (
-                  <>
-                    {item.cart?.map((product: any, idx: number) => (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: spacing.sm,
-                          padding: spacing.sm,
-                        }}
-                        key={idx}
-                      >
+
+                <div
+                  style={{
+                    display: "flex",
+                    gap: spacing.sm,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    size={typography.small}
+                    weight={600}
+                    color={colors.textSecondary}
+                  >
+                    ID:
+                  </Text>
+                  <Text
+                    size={typography.small}
+                    color={colors.textSecondary}
+                    style={{ fontFamily: "monospace" }}
+                  >
+                    {item.id}
+                  </Text>
+                </div>
+
+                <div
+                  style={{
+                    borderTop: `1px solid ${colors.border}`,
+                    paddingTop: spacing.sm,
+                  }}
+                >
+                  <div
+                    onClick={() => setOpenCardIndex(isOpen ? null : index)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: spacing.sm,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      style={{ color: colors.textSecondary }}
+                      icon={isOpen ? faChevronUp : faChevronDown}
+                    />
+                    <Text weight={700}>
+                      Productos ({item.cart?.length || 0})
+                    </Text>
+                  </div>
+                  {isOpen && (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: spacing.sm,
+                        marginTop: spacing.sm,
+                      }}
+                    >
+                      {item.cart?.map((product: any, idx: number) => (
                         <div
+                          key={idx}
                           style={{
                             display: "flex",
-                            gap: spacing.sm,
-                            alignItems: "center",
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                            gap: spacing.md,
+                            background: colors.surface,
+                            borderRadius: 12,
+                            padding: spacing.md,
                           }}
                         >
-                          <Text size={typography.body} weight={600}>
-                            {product.name}
-                            {product.quantity} =
-                          </Text>
-                          <Text size={typography.body}>
-                            ${product.sellingPrice * product.quantity}
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: spacing.xs,
+                            }}
+                          >
+                            <Text size={typography.body} weight={600}>
+                              {product.name}
+                            </Text>
+                            <Text
+                              size={typography.small}
+                              color={colors.textSecondary}
+                            >
+                              ${product.sellingPrice} × {product.quantity}
+                            </Text>
+                            {product.description && (
+                              <Text
+                                size={typography.small}
+                                color={colors.textDisabled}
+                              >
+                                {product.description}
+                              </Text>
+                            )}
+                          </div>
+                          <Text size={typography.body} weight={700}>
+                            $
+                            {(product.sellingPrice * product.quantity).toFixed(
+                              2,
+                            )}
                           </Text>
                         </div>
-
-                        <Text size={typography.small} color={colors.black}>
-                          ${product.sellingPrice} * {product.quantity}
-                        </Text>
-                        {product.description && (
-                          <Text size={typography.small}>
-                            {product.description}
-                          </Text>
-                        )}
-                      </div>
-                    ))}
-                  </>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {role === "admin" && (
+                  <AdminOrdersBody orderId={item.id} status={item.status} />
                 )}
-              </div>
-              {role === "admin" && (
-                <AdminOrdersBody orderId={item.id} status={item.status} />
-              )}
-            </OrderCard>
-          ))}
+              </OrderCard>
+            );
+          })}
         </div>
       )}
     </Card>
@@ -196,7 +262,7 @@ const AdminOrdersBody = ({
         icon: "times",
         function: async () => {
           await updateOrderStatusRTDB(orderId, "cancelled");
-          await addRemoveInventory(orderId, "decrement");
+          await addRemoveInventory(orderId, "increment");
           await Swal.fire(
             "Exito",
             `La orden ${orderId} ha sido cancelada exitosamente.`,

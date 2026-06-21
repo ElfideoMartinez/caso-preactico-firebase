@@ -17,6 +17,10 @@ function UserMenu() {
   }, []);
   const navigate = useNavigate();
   const [open, setOpen] = useState("");
+  const cartCount = cart.reduce(
+    (total, item) => total + (item.quantity || 0),
+    0,
+  );
 
   return (
     <div
@@ -24,13 +28,37 @@ function UserMenu() {
         position: "relative",
       }}
     >
-      <Button
-        onClick={() => {
-          setOpen("cart");
-        }}
-      >
-        <FontAwesomeIcon icon={faShoppingCart} style={{ marginRight: 8 }} />
-      </Button>
+      <div style={{ position: "relative", display: "inline-block" }}>
+        <Button
+          onClick={() => {
+            setOpen("cart");
+          }}
+        >
+          <FontAwesomeIcon icon={faShoppingCart} style={{ marginRight: 8 }} />
+        </Button>
+        {cartCount > 0 && (
+          <span
+            style={{
+              position: "absolute",
+              top: -6,
+              right: -6,
+              background: colors.danger,
+              color: colors.white,
+              borderRadius: 999,
+              minWidth: 20,
+              height: 20,
+              padding: "0 6px",
+              fontSize: 12,
+              fontWeight: 700,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {cartCount}
+          </span>
+        )}
+      </div>
       <button
         onClick={() => setOpen("user")}
         style={{

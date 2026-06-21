@@ -14,7 +14,7 @@ import { useCart } from "../contexts/CartContext";
 const Checkout = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { cart } = useCart();
+  const { cart, refreshCart } = useCart();
   const total = cart.reduce(
     (sum, item) => sum + item.sellingPrice * item.quantity,
     0,
@@ -44,6 +44,7 @@ const Checkout = () => {
         userId: user.uid,
         orderDatabaseId: newOrder.orderId,
       });
+      await refreshCart();
       Swal.fire({
         icon: "success",
         title: "¡Orden realizada con éxito!",

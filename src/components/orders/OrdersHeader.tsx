@@ -6,6 +6,7 @@ import { getStorageRef } from "../../services/firebase/storage/storageService";
 import { getDownloadURL } from "firebase/storage";
 import { useAuth } from "../../contexts/AuthContext";
 import { typography } from "../../constants/typography";
+import { colors } from "../../constants/colors";
 interface OrdersHeaderProps {
   user: {
     displayName: string | null;
@@ -30,46 +31,74 @@ const OrdersHeader = ({ user }: OrdersHeaderProps) => {
     };
     fetchUserPhotoURL();
   }, [user]);
+
+  const photo = userPhotoURL || authUser?.photoURL || null;
+  const displayName = user?.displayName || authUser?.displayName || "Usuario";
+  const initial = (displayName || user?.email || "U").charAt(0).toUpperCase();
+  const isAdmin = user?.role === "admin";
+
   return (
     <Card>
-      <div style={{ display: "flex", alignItems: "center", gap: spacing.md }}>
-        <img
-          src={
-            userPhotoURL ||
-            authUser?.photoURL ||
-            "https://via.placeholder.com/80"
-          }
-          alt='User Avatar'
-          style={{ width: 80, height: 80, borderRadius: "100%" }}
-        />
-        {user && (
+      <div style={{ display: "flex", alignItems: "center", gap: spacing.lg }}>
+        {photo ? (
+          <img
+            src={photo}
+            alt='User Avatar'
+            style={{
+              width: 72,
+              height: 72,
+              borderRadius: "100%",
+              objectFit: "cover",
+              border: `2px solid ${colors.border}`,
+            }}
+          />
+        ) : (
           <div
             style={{
+              width: 72,
+              height: 72,
+              borderRadius: "100%",
+              background: colors.gradients.primary,
               display: "flex",
-              flexDirection: "column",
-              gap: spacing.sm,
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
             }}
           >
-            <div
-              style={{ display: "flex", gap: spacing.sm, alignItems: "center" }}
-            >
-              <Text weight={700}>Name: </Text>
-              <Text size={typography.body}>{user.displayName || "N/A"}</Text>
-            </div>
-            <div
-              style={{ display: "flex", gap: spacing.sm, alignItems: "center" }}
-            >
-              <Text weight={700}>Email: </Text>
-              <Text size={typography.body}>{user.email || "N/A"}</Text>
-            </div>
-            <div
-              style={{ display: "flex", gap: spacing.sm, alignItems: "center" }}
-            >
-              <Text weight={700}>Role: </Text>
-              <Text size={typography.body}>{user.role || "N/A"}</Text>
-            </div>
+            <Text size={typography.h2} weight={700} color={colors.white}>
+              {initial}
+            </Text>
           </div>
         )}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: spacing.xs,
+          }}
+        >
+          <Text size={typography.h2} weight={700}>
+            {displayName}
+          </Text>
+          <Text size={typography.body} color={colors.textSecondary}>
+            {user?.email || "N/A"}
+          </Text>
+          <span
+            style={{
+              alignSelf: "flex-start",
+              marginTop: spacing.xs,
+              background: isAdmin ? colors.successLight : colors.surfaceHover,
+              color: isAdmin ? colors.success : colors.textSecondary,
+              padding: "4px 12px",
+              borderRadius: 999,
+              fontSize: typography.small,
+              fontWeight: 600,
+              textTransform: "capitalize",
+            }}
+          >
+            {user?.role || "user"}
+          </span>
+        </div>
       </div>
     </Card>
   );

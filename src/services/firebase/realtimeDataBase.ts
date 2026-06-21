@@ -1,4 +1,11 @@
-import { ref, set, onValue, update } from "firebase/database";
+import {
+  ref,
+  set,
+  onValue,
+  update,
+  query,
+  orderByChild,
+} from "firebase/database";
 import { rtdb } from "./firebaseApp";
 
 export const addNewOrderRTDB = async (orderData: any) => {
@@ -28,43 +35,24 @@ export const getUserOrdersRTDB = (
   callback: (orders: any[]) => void,
 ) => {
   const ordersRef = ref(rtdb, "orders");
-
-  const unsubscribe = onValue(
-    ordersRef,
+  const orderedQuery = query(ordersRef, orderByChild("timestamp"));
+  return onValue(
+    orderedQuery,
     (snapshot) => {
-      const data = snapshot.val();
-
-      if (!data) {
-        callback([]);
-        return;
-      }
-
-      let userOrders = [];
-      //if the user is admin, return all orders
-      if (userRole === "admin") {
-        userOrders = Object.keys(data).map((key) => ({
-          id: key,
-          ...data[key],
-        }));
-        callback(userOrders);
-        return;
-      }
-
-      for (const key in data) {
-        if (data[key].userId === userId) {
-          userOrders.push({
-            id: key,
-            ...data[key],
-          });
+      const orders: any[] = [];
+      snapshot.forEach((childSnapshot) => {
+        const order = {
+          id: childSnapshot.key,
+          ...childSnapshot.val(),
+        };
+        if (userRole === "admin" || order.userId === userId) {
+          orders.push(order);
         }
-      }
-
-      callback(userOrders);
+      });
+      callback(orders.reverse());
     },
     (error) => {
       console.error("Error fetching user orders:", error);
     },
   );
-
-  return unsubscribe;
 };
