@@ -17,7 +17,7 @@ const UsersTable = ({
   }>;
 }) => {
   useEffect(() => {
-    document.title = "Usuarios - Innovate Solutions";
+    document.title = "Usuarios - Comercializadora Nova";
   }, []);
   const handleUpdate = async (uid: string, field: string, value: string) => {
     try {

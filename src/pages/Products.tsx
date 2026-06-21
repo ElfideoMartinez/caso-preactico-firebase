@@ -7,7 +7,7 @@ import { useProducts } from "../contexts/ProductsContext";
 const Products = () => {
   const { products } = useProducts();
   useEffect(() => {
-    document.title = "Productos - Innovate Solutions";
+    document.title = "Productos - Comercializadora Nova";
   }, []);
   return (
     <>

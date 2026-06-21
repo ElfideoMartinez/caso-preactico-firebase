@@ -13,7 +13,7 @@ import { faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
 function UserMenu() {
   const { cart } = useCart();
   useEffect(() => {
-    document.title = "User Menu - Innovate Solutions";
+    document.title = "User Menu - Comercializadora Nova";
   }, []);
   const navigate = useNavigate();
   const [open, setOpen] = useState("");

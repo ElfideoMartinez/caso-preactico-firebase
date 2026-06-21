@@ -47,7 +47,7 @@ const EditProfileForm = () => {
     });
   };
   useEffect(() => {
-    document.title = "Edit Profile - Innovate Solutions";
+    document.title = "Edit Profile - Comercializadora Nova";
     const fetchUserPhotoURL = async () => {
       if (userData?.photoURL) {
         const storageRef = getStorageRef(userData.photoURL);

@@ -16,7 +16,7 @@ const PedidosPage = () => {
   const [tab, setTab] = useState<"active" | "inactive">("active");
 
   useEffect(() => {
-    document.title = "Pedidos - Innovate Solutions";
+    document.title = "Pedidos - Comercializadora Nova";
   }, []);
   useEffect(() => {
     if (!user?.uid) return;
@@ -65,7 +65,9 @@ const PedidosPage = () => {
         padding: spacing.lg,
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column", gap: spacing.xs }}>
+      <div
+        style={{ display: "flex", flexDirection: "column", gap: spacing.xs }}
+      >
         <Text size={typography.h1} weight={700}>
           Pedidos
         </Text>
@@ -75,7 +77,10 @@ const PedidosPage = () => {
       </div>
       <OrdersHeader user={userData as any} />
       <div style={{ display: "flex", gap: spacing.sm }}>
-        <button onClick={() => setTab("active")} style={tabStyle(tab === "active")}>
+        <button
+          onClick={() => setTab("active")}
+          style={tabStyle(tab === "active")}
+        >
           Activos ({activeOrders.length})
         </button>
         <button

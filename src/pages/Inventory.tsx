@@ -11,7 +11,7 @@ const Inventory = () => {
   const { products, refreshProducts, setProducts } = useProducts();
   const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
-    document.title = "Inventario - Innovate Solutions";
+    document.title = "Inventario - Comercializadora Nova";
   }, []);
   return (
     <Card style={{ display: "flex", flexDirection: "column", gap: 16 }}>

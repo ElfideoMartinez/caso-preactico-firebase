@@ -34,7 +34,7 @@ function Header({ onToggleSidebar }: HeaderProps) {
             color: colors.secondary,
           }}
         >
-          Innovate Solutions
+          Comercializadora Nova
         </h2>
       </div>
       <UserMenu />

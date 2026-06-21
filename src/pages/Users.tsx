@@ -15,7 +15,7 @@ const Users = () => {
     Array<{ displayName: string; email: string; role: string; uid: string }>
   >([]);
   useEffect(() => {
-    document.title = "Usuarios - Innovate Solutions";
+    document.title = "Usuarios - Comercializadora Nova";
   }, []);
   useEffect(() => {
     const fetchUsers = async () => {
