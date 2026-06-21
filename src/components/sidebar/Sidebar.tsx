@@ -30,6 +30,11 @@ function Sidebar() {
         background: colors.surface,
         borderRight: `1px solid ${colors.border}`,
         padding: 20,
+        position: "sticky",
+        top: 70,
+        alignSelf: "flex-start",
+        height: "calc(100vh - 70px)",
+        overflowY: "auto",
       }}
     >
       <div

@@ -21,6 +21,9 @@ function Header({ onToggleSidebar }: HeaderProps) {
         alignItems: "center",
         justifyContent: "space-between",
         padding: "0 24px",
+        position: "sticky",
+        top: 0,
+        zIndex: 100,
       }}
     >
       <div
