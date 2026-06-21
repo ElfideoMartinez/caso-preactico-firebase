@@ -77,6 +77,7 @@ function UserMenu() {
             <button
               onClick={() => {
                 navigate("/profile");
+                setOpen("");
               }}
               style={menuStyle}
             >

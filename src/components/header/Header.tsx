@@ -23,6 +23,7 @@ function Header({ onToggleSidebar }: HeaderProps) {
         padding: "0 24px",
         position: "sticky",
         top: 0,
+        zIndex: 1,
       }}
     >
       <div

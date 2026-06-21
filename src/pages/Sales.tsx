@@ -246,7 +246,14 @@ const Sales = () => {
         </Text>
         <div style={{ height: 300, width: "100%" }}>
           {items.length > 0 && (
-            <Chart options={{ data: itemData, primaryAxis, secondaryAxes }} />
+            <Chart
+              options={{
+                data: itemData,
+                primaryAxis,
+                secondaryAxes,
+                getSeriesStyle,
+              }}
+            />
           )}
         </div>
 

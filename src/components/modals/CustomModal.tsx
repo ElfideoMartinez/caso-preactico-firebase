@@ -30,9 +30,11 @@ export default function CustomModal({
           borderRadius: "12px",
           padding: "24px",
           gap: "16px",
+          zIndex: 1000,
         },
         overlay: {
           backgroundColor: "rgba(0,0,0,0.5)",
+          zIndex: 999,
         },
       }}
     >
