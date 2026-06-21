@@ -192,10 +192,11 @@ const AdminOrdersBody = ({
     active: [
       {
         label: "Cancelar Orden",
-        color: statusColors["completed"],
+        color: statusColors["cancelled"],
         icon: "times",
         function: async () => {
           await updateOrderStatusRTDB(orderId, "cancelled");
+          await addRemoveInventory(orderId, "decrement");
           await Swal.fire(
             "Exito",
             `La orden ${orderId} ha sido cancelada exitosamente.`,

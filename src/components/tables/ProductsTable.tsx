@@ -60,7 +60,7 @@ const ProductsTable = ({
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              await editProduct(row.id, "price", row.price);
+              await editProduct(row.id, "price", Number(row.price));
               return;
             }
           }}
@@ -80,7 +80,7 @@ const ProductsTable = ({
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              await editProduct(row.id, "stock", row.stock);
+              await editProduct(row.id, "stock", Number(row.stock));
               return;
             }
           }}
