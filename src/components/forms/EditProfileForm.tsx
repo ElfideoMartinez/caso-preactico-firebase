@@ -15,6 +15,7 @@ import {
 } from "../../services/firebase/storage/storageService";
 import { updateProfile } from "../../services/firebase/users/updateProfile";
 import { getDownloadURL } from "firebase/storage";
+import { logout, resetPassword } from "../../services/firebase/authServices";
 
 const EditProfileForm = () => {
   const { userData } = useCart();
@@ -160,7 +161,38 @@ const EditProfileForm = () => {
             gap: spacing.md,
           }}
         >
-          <Button variant='warningLightButton'>
+          <Button
+            variant='warningLightButton'
+            onClick={async () => {
+              const response = await Swal.fire({
+                title: "¿Estás seguro?",
+                text: "Se te enviará un email con un link para cambiar tu contraseña",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Sí, enviar email",
+                cancelButtonText: "No, cancelar",
+              });
+              if (response.isConfirmed) {
+                try {
+                  await resetPassword(email);
+                  await logout();
+                  Swal.fire({
+                    title: "Email enviado",
+                    text: "Revisa tu bandeja de entrada para cambiar tu contraseña",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                  });
+                } catch (error) {
+                  Swal.fire({
+                    title: "Error",
+                    text: "Hubo un error al enviar el email. Por favor intenta nuevamente.",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                  });
+                }
+              }
+            }}
+          >
             <Text color={colors.warning}>
               Click aqui para cambiar recibir un email con el link para cambiar
               tu contraseña
