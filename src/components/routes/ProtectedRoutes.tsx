@@ -14,18 +14,24 @@ const ProtectedRoute = ({
   const { user, loading } = useAuth();
   const { userData } = useCart();
   const location = useLocation();
-  //if no allowed role is specified, allow any authenticated user
-  if (!allowedRoles || (userData && userData.role === "admin")) {
-    return children;
-  }
-  if (allowedRoles && userData && !allowedRoles.includes(userData.role)) {
-    return <Navigate to='/not-allowed' state={{ from: location }} replace />;
-  }
   if (loading) {
     return <Text>Loading authentication state...</Text>;
   }
   if (!user) {
     return <Navigate to='/login' state={{ from: location }} replace />;
+  }
+  //if no allowed role is specified, allow any authenticated user
+  if (!allowedRoles) {
+    return children;
+  }
+  if (!userData) {
+    return <Text>Loading authentication state...</Text>;
+  }
+  if (userData.role === "admin") {
+    return children;
+  }
+  if (!allowedRoles.includes(userData.role)) {
+    return <Navigate to='/not-allowed' state={{ from: location }} replace />;
   }
 
   return children;

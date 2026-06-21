@@ -3,6 +3,8 @@ import DataTable from "react-data-table-component";
 import Select from "../inputs/Select";
 import { updateProfile } from "../../services/firebase/users/updateProfile";
 import { colors } from "../../constants/colors";
+import { roleSelectOptions } from "../../constants/roles";
+import { useAuth } from "../../contexts/AuthContext";
 
 const UsersTable = ({
   searchTerm,
@@ -16,6 +18,7 @@ const UsersTable = ({
     role: string;
   }>;
 }) => {
+  const { user } = useAuth();
   const handleUpdate = async (uid: string, field: string, value: string) => {
     try {
       await updateProfile({ uid, [field]: value });
@@ -82,10 +85,8 @@ const UsersTable = ({
           cell: (row) => (
             <Select
               initialValue={row.role}
-              options={[
-                { value: "admin", label: "Admin" },
-                { value: "user", label: "User" },
-              ]}
+              options={roleSelectOptions}
+              disabled={row.uid === user?.uid}
               onChange={async (value) => {
                 await handleUpdate(row.uid, "role", value);
               }}

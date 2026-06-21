@@ -4,19 +4,25 @@ import { useCart } from "../../contexts/CartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBoxOpen,
+  faChartLine,
   faShoppingCart,
   faUser,
   faWarehouse,
 } from "@fortawesome/free-solid-svg-icons";
+import { allowedRoutesByRole, type RoleOptions } from "../../constants/roles";
 
-type RoleOptions = "admin" | "user";
+const navLinks = [
+  { to: "/pedidos", label: "Pedidos", icon: faShoppingCart },
+  { to: "/productos", label: "Productos", icon: faBoxOpen },
+  { to: "/inventory", label: "Inventory", icon: faWarehouse },
+  { to: "/sales", label: "Ventas", icon: faChartLine },
+  { to: "/users", label: "Users", icon: faUser },
+];
 
 function Sidebar() {
   const { userData } = useCart();
-  const allowedRoutesByRole: Record<RoleOptions, string[]> = {
-    admin: ["/pedidos", "/productos", "/inventory", "/users"],
-    user: ["/pedidos", "/productos"],
-  };
+  const role = (userData?.role as RoleOptions) || "user";
+  const allowedRoutes = allowedRoutesByRole[role] || [];
   return (
     <aside
       style={{
@@ -33,66 +39,24 @@ function Sidebar() {
           gap: 16,
         }}
       >
-        <NavLink
-          to='/pedidos'
-          style={({ isActive }) => ({
-            padding: "12px 16px",
-            borderRadius: 8,
-            textDecoration: "none",
-            color: isActive ? colors.primary : colors.text,
-            background: isActive ? colors.primary + "20" : "transparent",
-          })}
-        >
-          <FontAwesomeIcon icon={faShoppingCart} style={{ marginRight: 8 }} />
-          Pedidos
-        </NavLink>
-        <NavLink
-          to='/productos'
-          style={({ isActive }) => ({
-            padding: "12px 16px",
-            borderRadius: 8,
-            textDecoration: "none",
-            color: isActive ? colors.primary : colors.text,
-            background: isActive ? colors.primary + "20" : "transparent",
-          })}
-        >
-          <FontAwesomeIcon icon={faBoxOpen} style={{ marginRight: 8 }} />
-          Productos
-        </NavLink>
-        {allowedRoutesByRole[
-          (userData?.role as RoleOptions) || "user"
-        ].includes("/inventory") && (
-          <NavLink
-            to='/inventory'
-            style={({ isActive }) => ({
-              padding: "12px 16px",
-              borderRadius: 8,
-              textDecoration: "none",
-              color: isActive ? colors.primary : colors.text,
-              background: isActive ? colors.primary + "20" : "transparent",
-            })}
-          >
-            <FontAwesomeIcon icon={faWarehouse} style={{ marginRight: 8 }} />
-            Inventory
-          </NavLink>
-        )}
-        {allowedRoutesByRole[
-          (userData?.role as RoleOptions) || "user"
-        ].includes("/users") && (
-          <NavLink
-            to='/users'
-            style={({ isActive }) => ({
-              padding: "12px 16px",
-              borderRadius: 8,
-              textDecoration: "none",
-              color: isActive ? colors.primary : colors.text,
-              background: isActive ? colors.primary + "20" : "transparent",
-            })}
-          >
-            <FontAwesomeIcon icon={faUser} style={{ marginRight: 8 }} />
-            Users
-          </NavLink>
-        )}
+        {navLinks
+          .filter((link) => allowedRoutes.includes(link.to))
+          .map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              style={({ isActive }) => ({
+                padding: "12px 16px",
+                borderRadius: 8,
+                textDecoration: "none",
+                color: isActive ? colors.primary : colors.text,
+                background: isActive ? colors.primary + "20" : "transparent",
+              })}
+            >
+              <FontAwesomeIcon icon={link.icon} style={{ marginRight: 8 }} />
+              {link.label}
+            </NavLink>
+          ))}
       </div>
     </aside>
   );

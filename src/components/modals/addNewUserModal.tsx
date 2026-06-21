@@ -9,6 +9,7 @@ import { useState } from "react";
 import { createUser } from "../../services/firebase/users";
 import { colors } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
+import { roleSelectOptions } from "../../constants/roles";
 import Swal from "sweetalert2";
 
 interface AddNewUserModalProps {
@@ -114,10 +115,7 @@ const AddNewUserModal = ({
         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
       />
       <Select
-        options={[
-          { value: "admin", label: "Administrador" },
-          { value: "user", label: "Usuario" },
-        ]}
+        options={roleSelectOptions}
         onChange={(value) => setFormData({ ...formData, role: value })}
       />
       <div

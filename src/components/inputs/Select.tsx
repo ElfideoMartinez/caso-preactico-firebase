@@ -1,4 +1,3 @@
-import { spacing } from "../../constants/spacing";
 import { colors } from "../../constants/colors";
 import { typography } from "../../constants/typography";
 import { useState } from "react";
@@ -8,9 +7,10 @@ interface SelectProps {
   options: Array<{ value: string; label: string }>;
   onChange: (value: string) => void | Promise<void>;
   initialValue?: string;
+  disabled?: boolean;
 }
 
-const Select = ({ options, onChange, initialValue }: SelectProps) => {
+const Select = ({ options, onChange, initialValue, disabled }: SelectProps) => {
   const [isLoading, setIsLoading] = useState(false);
   if (isLoading) {
     return (
@@ -28,6 +28,7 @@ const Select = ({ options, onChange, initialValue }: SelectProps) => {
   }
   return (
     <select
+      disabled={disabled}
       style={{
         width: "100%",
         fontSize: typography.body,
@@ -36,7 +37,8 @@ const Select = ({ options, onChange, initialValue }: SelectProps) => {
         borderRadius: 10,
         border: `1px solid ${colors.border}`,
         backgroundColor: colors.surface,
-        cursor: "pointer",
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.6 : 1,
         outline: "none",
       }}
       onChange={async (e) => {

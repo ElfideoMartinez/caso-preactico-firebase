@@ -89,7 +89,7 @@ function AuthCard() {
                 const user = await login(formData.email, formData.password);
                 console.log("User logged in:", user);
               }
-              navigate("/productos");
+              navigate("/");
             } catch (error) {
               console.error("Authentication error:", error);
             }
@@ -122,7 +122,7 @@ function AuthCard() {
                 signInMethod: "google",
               });
 
-              navigate("/productos");
+              navigate("/");
             } catch (error) {
               console.error("Authentication error:", error);
             }

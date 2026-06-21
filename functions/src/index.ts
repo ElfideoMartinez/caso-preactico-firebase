@@ -29,6 +29,7 @@ export { addToCart } from "./features/users/addToCart";
 export { getUserCart } from "./features/users/getUserCart";
 export { editProduct } from "./features/products/editProduct";
 export { placeNewOrder } from "./features/orders/PlaceNewOrder";
+export { getAllOrders } from "./features/orders/getAllOrders";
 export { editUser } from "./features/users/editUser";
 export { addRemoveInventory } from "./features/products/addRemoveInventory";
 export { deleteProduct } from "./features/products/deleteProduct";

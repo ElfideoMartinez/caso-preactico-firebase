@@ -10,6 +10,8 @@ import Inventory from "../pages/Inventory";
 import Checkout from "../pages/Checkout";
 import Profile from "../pages/Profile";
 import NotAllowed from "../pages/NotAllowed";
+import Sales from "../pages/Sales";
+import RoleRedirect from "../components/routes/RoleRedirect";
 
 export default function AppRoutes() {
   return (
@@ -18,10 +20,11 @@ export default function AppRoutes() {
         <Route path='not-allowed' element={<NotAllowed />} />
         <Route path='/login' element={<LoginPage />} />
         <Route element={<MainLayout />}>
+          <Route path='/' element={<RoleRedirect />} />
           <Route
             path='/pedidos'
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["user"]}>
                 <PedidosPage />
               </ProtectedRoute>
             }
@@ -37,7 +40,7 @@ export default function AppRoutes() {
           <Route
             path='/productos'
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["user", "sales"]}>
                 <Products />
               </ProtectedRoute>
             }
@@ -45,15 +48,23 @@ export default function AppRoutes() {
           <Route
             path='/inventory'
             element={
-              <ProtectedRoute allowedRoles={["admin"]}>
+              <ProtectedRoute allowedRoles={["provider", "sales"]}>
                 <Inventory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/sales'
+            element={
+              <ProtectedRoute allowedRoles={["sales"]}>
+                <Sales />
               </ProtectedRoute>
             }
           />
           <Route
             path='/checkout'
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["user"]}>
                 <Checkout />
               </ProtectedRoute>
             }
