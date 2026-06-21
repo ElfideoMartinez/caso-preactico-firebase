@@ -30,3 +30,4 @@ export { editProduct } from "./features/products/editProduct";
 export { placeNewOrder } from "./features/orders/PlaceNewOrder";
 export { editUser } from "./features/users/editUser";
 export { addRemoveInventory } from "./features/products/addRemoveInventory";
+export { deleteProduct } from "./features/products/deleteProduct";

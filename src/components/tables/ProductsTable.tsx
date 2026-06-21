@@ -2,6 +2,11 @@ import DataTable, { type TableColumn } from "react-data-table-component";
 import Text from "../typography/Text";
 import Input from "../inputs/Input";
 import { editProduct } from "../../services/firebase/products/EditProduct";
+import { colors } from "../../constants/colors";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import Swal from "sweetalert2";
+import { removeFromInventory } from "../../services/firebase/products/removeFromInventory";
 
 export interface Product {
   id: string;
@@ -30,6 +35,31 @@ const ProductsTable = ({
     setData((prevData) =>
       prevData.map((item) => (item.id === row.id ? updatedRow : item)),
     );
+  };
+  const handleDelete = async (row: Product) => {
+    try {
+      await removeFromInventory(row.uid);
+      Swal.fire({
+        title: "¿Eliminar producto?",
+        text: `Se eliminará "${row.name}".`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: colors.danger,
+        cancelButtonColor: colors.textSecondary,
+      });
+      setProducts((prev) => prev.filter((product) => product.id !== row.id));
+    } catch (error) {
+      console.error("Error al eliminar producto: ", error);
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo eliminar el producto. Inténtalo de nuevo.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: colors.danger,
+      });
+    }
   };
   const columns: TableColumn<Product>[] = [
     {
@@ -90,11 +120,69 @@ const ProductsTable = ({
         />
       ),
     },
+    {
+      name: "",
+      width: "72px",
+      cell: (row: Product) => (
+        <button
+          aria-label='Eliminar producto'
+          onClick={() => handleDelete(row)}
+          style={{
+            border: "none",
+            background: "transparent",
+            color: colors.danger,
+            cursor: "pointer",
+            fontSize: 16,
+            padding: 8,
+            borderRadius: 8,
+          }}
+        >
+          <FontAwesomeIcon icon={faTrash} />
+        </button>
+      ),
+    },
   ];
+  const customStyles = {
+    headRow: {
+      style: {
+        background: colors.surfaceHover,
+        borderBottomColor: colors.border,
+      },
+    },
+    headCells: {
+      style: {
+        color: colors.text,
+        fontWeight: 700,
+        fontSize: 14,
+      },
+    },
+    rows: {
+      style: {
+        minHeight: 64,
+        color: colors.text,
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: colors.backgroundColor,
+        borderTopColor: colors.border,
+      },
+    },
+  };
   if (products.length === 0) {
-    return <Text>No hay productos disponibles.</Text>;
+    return (
+      <Text color={colors.textSecondary}>No hay productos disponibles.</Text>
+    );
   }
-  return <DataTable columns={columns} data={products} pagination />;
+  return (
+    <DataTable
+      columns={columns}
+      data={products}
+      pagination
+      customStyles={customStyles}
+      highlightOnHover
+    />
+  );
 };
 
 export default ProductsTable;
