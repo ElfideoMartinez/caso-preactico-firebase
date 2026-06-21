@@ -158,40 +158,100 @@ const Sales = () => {
   };
 
   return (
-    <Card style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      <Text size={typography.h1} weight={700}>
-        Ventas
-      </Text>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <div
-            style={{ ...rowStyle, borderBottom: `1px solid ${colors.border}` }}
-          >
-            <Text weight={700}>Producto</Text>
-            <Text weight={700}>Cantidad vendida</Text>
-            <Text weight={700}>Monto</Text>
-          </div>
-          {items.length === 0 ? (
-            <Text color={colors.textSecondary}>No hay ventas todavía.</Text>
-          ) : (
-            items.map((item, index) => (
-              <div key={index} style={rowStyle}>
-                <Text>{item.name}</Text>
-                <Text>{item.quantity}</Text>
-                <Text>${item.amount.toFixed(2)}</Text>
-              </div>
-            ))
+    <>
+      <Card style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        <Text size={typography.h1} weight={700}>
+          Ventas
+        </Text>
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <div
+              style={{
+                ...rowStyle,
+                borderBottom: `1px solid ${colors.border}`,
+              }}
+            >
+              <Text weight={700}>Producto</Text>
+              <Text weight={700}>Cantidad vendida</Text>
+              <Text weight={700}>Monto</Text>
+            </div>
+            {items.length === 0 ? (
+              <Text color={colors.textSecondary}>No hay ventas todavía.</Text>
+            ) : (
+              items.map((item, index) => (
+                <div key={index} style={rowStyle}>
+                  <Text>{item.name}</Text>
+                  <Text>{item.quantity}</Text>
+                  <Text>${item.amount.toFixed(2)}</Text>
+                </div>
+              ))
+            )}
+            <div
+              style={{ ...rowStyle, borderTop: `1px solid ${colors.border}` }}
+            >
+              <Text weight={700}>Total de ventas</Text>
+              <span />
+              <Text weight={700}>${totalSales.toFixed(2)}</Text>
+            </div>
+          </>
+        )}
+      </Card>
+      <Card
+        style={{
+          marginTop: spacing.lg,
+          gap: 24,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Text size={typography.h1} weight={700}>
+          Cantidad vendida por producto
+        </Text>
+        <div style={{ height: 300, width: "100%" }}>
+          {items.length > 0 && (
+            <Chart options={{ data: itemData, primaryAxis, secondaryAxes }} />
           )}
-          <div style={{ ...rowStyle, borderTop: `1px solid ${colors.border}` }}>
-            <Text weight={700}>Total de ventas</Text>
-            <span />
-            <Text weight={700}>${totalSales.toFixed(2)}</Text>
-          </div>
-        </>
-      )}
-    </Card>
+        </div>
+
+        <Text size={typography.h1} weight={700}>
+          Ventas totales por fecha
+        </Text>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: spacing.md }}>
+          {salesByDateChart.map((series, index) => (
+            <div
+              key={index}
+              style={{ display: "flex", alignItems: "center", gap: spacing.xs }}
+            >
+              <span
+                style={{
+                  width: 14,
+                  height: 14,
+                  borderRadius: 3,
+                  background: seriesColors[index % seriesColors.length],
+                  display: "inline-block",
+                }}
+              />
+              <Text size={typography.small}>{series.label}</Text>
+            </div>
+          ))}
+        </div>
+        <div style={{ height: 300, width: "100%" }}>
+          {salesByDateChart.length > 0 &&
+            salesByDateChart[0].data.length > 0 && (
+              <Chart
+                options={{
+                  data: salesByDateChart,
+                  primaryAxis,
+                  secondaryAxes: stackedSecondaryAxes,
+                  getSeriesStyle,
+                }}
+              />
+            )}
+        </div>
+      </Card>
+    </>
   );
 };
 

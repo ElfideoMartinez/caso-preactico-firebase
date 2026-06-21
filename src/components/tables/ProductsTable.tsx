@@ -145,7 +145,7 @@ const ProductsTable = ({
       ),
     },
     {
-      name: "",
+      name: "Borrar",
       width: "72px",
       cell: (row: Product) => (
         <button

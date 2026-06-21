@@ -2,6 +2,8 @@ import Card from "./Card";
 import Button from "../buttons/Button";
 import Text from "../typography/Text";
 import { colors } from "../../constants/colors";
+import { spacing } from "../../constants/spacing";
+import { typography } from "../../constants/typography";
 import { useAuth } from "../../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -71,12 +73,12 @@ function ProductCard({
   }, [imageUrl]);
 
   return (
-    <Card style={{ minWidth: 300, margin: 16 }}>
+    <Card style={{ minWidth: 300 }}>
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: 16,
+          gap: spacing.md,
           width: "100%",
         }}
       >
@@ -112,7 +114,7 @@ function ProductCard({
                 fontSize: 13,
               }}
             >
-              SALE
+              OFERTA
             </div>
           )}
         </div>
@@ -121,10 +123,10 @@ function ProductCard({
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: 8,
+            gap: spacing.sm,
           }}
         >
-          <Text size={20} weight={700}>
+          <Text size={typography.h3} weight={700}>
             {name}
           </Text>
 
@@ -135,12 +137,12 @@ function ProductCard({
           style={{
             display: "flex",
             alignItems: "center",
-            gap: 12,
+            gap: spacing.sm,
           }}
         >
           {onSale ? (
             <>
-              <Text size={24} weight={700} color={colors.success}>
+              <Text size={typography.h2} weight={700} color={colors.success}>
                 ${salePrice}
               </Text>
 
@@ -149,7 +151,7 @@ function ProductCard({
               </Text>
             </>
           ) : (
-            <Text size={24} weight={700}>
+            <Text size={typography.h2} weight={700}>
               ${price}
             </Text>
           )}
@@ -160,7 +162,7 @@ function ProductCard({
               style={{
                 background: colors.dangerLight,
                 color: colors.danger,
-                padding: 12,
+                padding: spacing.sm,
                 borderRadius: 12,
                 textAlign: "center",
                 fontWeight: 600,
@@ -174,13 +176,13 @@ function ProductCard({
                 style={{
                   background: colors.successLight,
                   color: colors.success,
-                  padding: 12,
+                  padding: spacing.sm,
                   borderRadius: 12,
                   textAlign: "center",
                   fontWeight: 600,
                 }}
               >
-                Limited-time discount
+                Descuento por tiempo limitado
               </div>
             )
           )}
@@ -188,7 +190,7 @@ function ProductCard({
         <div
           style={{
             display: "flex",
-            gap: 8,
+            gap: spacing.sm,
             alignItems: "center",
             justifyContent: "center",
           }}
@@ -206,7 +208,7 @@ function ProductCard({
               Swal.fire({
                 position: "top-end",
                 icon: "success",
-                title: "Product added to cart",
+                title: "Producto agregado al carrito",
                 showConfirmButton: false,
                 timer: 1500,
               });
@@ -214,15 +216,15 @@ function ProductCard({
               console.error("Error adding product to cart:", error);
               Swal.fire({
                 icon: "error",
-                title: "Failed to add product to cart",
-                text: "Please try again later.",
+                title: "No se pudo agregar al carrito",
+                text: "Inténtalo de nuevo más tarde.",
               });
             } finally {
               setIsLoading(false);
             }
           }}
         >
-          Add to Cart
+          Agregar al carrito
         </Button>
       </div>
     </Card>
