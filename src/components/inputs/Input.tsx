@@ -1,8 +1,14 @@
 import { colors } from "../../constants/colors";
+import { ClipLoader } from "react-spinners";
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
+type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  isLoading?: boolean;
+};
 
-function Input({ style, onFocus, onBlur, ...rest }: InputProps) {
+function Input({ style, onFocus, onBlur, isLoading, ...rest }: InputProps) {
+  if (isLoading) {
+    return <ClipLoader color={colors.primary} size={24} />;
+  }
   return (
     <input
       {...rest}

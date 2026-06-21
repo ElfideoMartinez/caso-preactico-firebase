@@ -19,6 +19,7 @@
     "dotenv": "^17.4.2",
     "firebase": "^12.14.0",
     "react": "^19.2.6",
+    "react-charts": "^3.0.0-beta.57",
     "react-data-table-component": "^8.4.0",
     "react-dom": "^19.2.6",
     "react-modal": "^3.16.3",

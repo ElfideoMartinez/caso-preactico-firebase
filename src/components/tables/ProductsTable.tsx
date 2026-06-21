@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import { removeFromInventory } from "../../services/firebase/products/removeFromInventory";
+import { useState } from "react";
 
 export interface Product {
   id: string;
@@ -23,6 +24,7 @@ const ProductsTable = ({
   products: Product[];
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 }) => {
+  const [loadingInputs, setLoadingInputs] = useState<string[]>([]);
   const handleInputChangeFunction = (
     e: React.ChangeEvent<HTMLInputElement>,
     row: Product,
@@ -30,11 +32,32 @@ const ProductsTable = ({
     setData: React.Dispatch<React.SetStateAction<Product[]>>,
   ) => {
     const newValue = e.currentTarget.value;
-    //return the new object with the updated value
     const updatedRow = { ...row, [fieldName]: newValue };
     setData((prevData) =>
       prevData.map((item) => (item.id === row.id ? updatedRow : item)),
     );
+  };
+  const handleUpdate = async (
+    id: string,
+    field: keyof Product,
+    value: string | number,
+  ) => {
+    const loadingKey = `${id}-${field}`;
+    try {
+      setLoadingInputs((prev) => [...prev, loadingKey]);
+      await editProduct(id, field, value);
+    } catch (error) {
+      console.error("Error al editar producto: ", error);
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo editar el producto. Inténtalo de nuevo.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: colors.danger,
+      });
+    } finally {
+      setLoadingInputs((prev) => prev.filter((key) => key !== loadingKey));
+    }
   };
   const handleDelete = async (row: Product) => {
     try {
@@ -66,12 +89,13 @@ const ProductsTable = ({
       name: "Nombre",
       selector: (row: Product) => (
         <Input
+          isLoading={loadingInputs.includes(`${row.id}-name`)}
           type='text'
           value={row.name}
-          onKeyDown={async (e) => {
+          onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              await editProduct(row.id, "name", row.name);
+              handleUpdate(row.id, "name", row.name);
             }
           }}
           onChange={(e) => {
@@ -85,13 +109,13 @@ const ProductsTable = ({
       name: "Precio unitario",
       selector: (row: Product) => (
         <Input
+          isLoading={loadingInputs.includes(`${row.id}-price`)}
           type='text'
           value={row.price}
-          onKeyDown={async (e) => {
+          onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              await editProduct(row.id, "price", Number(row.price));
-              return;
+              handleUpdate(row.id, "price", Number(row.price));
             }
           }}
           onChange={(e) => {
@@ -105,13 +129,13 @@ const ProductsTable = ({
       name: "Cantidad en stock",
       selector: (row: Product) => (
         <Input
+          isLoading={loadingInputs.includes(`${row.id}-stock`)}
           type='text'
           value={row.stock}
-          onKeyDown={async (e) => {
+          onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              await editProduct(row.id, "stock", Number(row.stock));
-              return;
+              handleUpdate(row.id, "stock", Number(row.stock));
             }
           }}
           onChange={(e) => {

@@ -9,10 +9,12 @@ import Text from "../components/typography/Text";
 import { typography } from "../constants/typography";
 import { spacing } from "../constants/spacing";
 import { colors } from "../constants/colors";
+import Loader from "../components/loaders/Loader";
 
 const Users = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<
     Array<{ displayName: string; email: string; role: string; uid: string }>
   >([]);
@@ -21,10 +23,13 @@ const Users = () => {
   }, []);
   const fetchUsers = async () => {
     try {
+      setLoading(true);
       const users = await getAllUsers();
       setUsers(users);
     } catch (error) {
       console.error("Error al obtener usuarios:", error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -72,7 +77,11 @@ const Users = () => {
         </Button>
       </div>
       <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <UsersTable searchTerm={searchTerm} users={users} />
+      {loading ? (
+        <Loader />
+      ) : (
+        <UsersTable searchTerm={searchTerm} users={users} />
+      )}
     </Card>
   );
 };

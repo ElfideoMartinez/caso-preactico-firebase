@@ -6,9 +6,10 @@ import { typography } from "../constants/typography";
 import Button from "../components/buttons/Button";
 import AddNewProductModal from "../components/modals/AddNewProductModal";
 import { useProducts } from "../contexts/ProductsContext";
+import Loader from "../components/loaders/Loader";
 
 const Inventory = () => {
-  const { products, refreshProducts, setProducts } = useProducts();
+  const { products, loading, refreshProducts, setProducts } = useProducts();
   const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     document.title = "Inventario - Comercializadora Nova";
@@ -32,7 +33,11 @@ const Inventory = () => {
         </Text>
         <Button onClick={() => setIsModalOpen(true)}>Agregar Producto</Button>
       </div>
-      <ProductsTable products={products} setProducts={setProducts} />
+      {loading ? (
+        <Loader />
+      ) : (
+        <ProductsTable products={products} setProducts={setProducts} />
+      )}
     </Card>
   );
 };

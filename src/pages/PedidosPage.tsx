@@ -8,6 +8,7 @@ import { getUserOrdersRTDB } from "../services/firebase/realtimeDataBase";
 import { useCart } from "../contexts/CartContext";
 import { typography } from "../constants/typography";
 import { colors } from "../constants/colors";
+import Loader from "../components/loaders/Loader";
 
 const PedidosPage = () => {
   const { user, loading } = useAuth();
@@ -32,8 +33,8 @@ const PedidosPage = () => {
     return () => unsubscribe();
   }, [user, userData]);
 
-  if (loading) {
-    return <Text>Loading...</Text>;
+  if (loading || userOrders === null) {
+    return <Loader />;
   }
 
   const orders = userOrders || [];

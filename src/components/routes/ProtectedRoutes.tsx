@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import type { JSX } from "react/jsx-runtime";
-import Text from "../typography/Text";
+import Loader from "../loaders/Loader";
 import { useCart } from "../../contexts/CartContext";
 
 const ProtectedRoute = ({
@@ -15,7 +15,7 @@ const ProtectedRoute = ({
   const { userData } = useCart();
   const location = useLocation();
   if (loading) {
-    return <Text>Loading authentication state...</Text>;
+    return <Loader />;
   }
   if (!user) {
     return <Navigate to='/login' state={{ from: location }} replace />;
@@ -25,7 +25,7 @@ const ProtectedRoute = ({
     return children;
   }
   if (!userData) {
-    return <Text>Loading authentication state...</Text>;
+    return <Loader />;
   }
   if (userData.role === "admin") {
     return children;

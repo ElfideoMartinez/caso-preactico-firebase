@@ -3,9 +3,10 @@ import ProductCard from "../components/cards/ProductCard";
 import Text from "../components/typography/Text";
 import { typography } from "../constants/typography";
 import { useProducts } from "../contexts/ProductsContext";
+import Loader from "../components/loaders/Loader";
 
 const Products = () => {
-  const { products } = useProducts();
+  const { products, loading } = useProducts();
   useEffect(() => {
     document.title = "Productos - Comercializadora Nova";
   }, []);
@@ -14,7 +15,9 @@ const Products = () => {
       <Text size={typography.h1} weight={700}>
         Productos
       </Text>
-      {products.length > 0 ? (
+      {loading ? (
+        <Loader />
+      ) : products.length > 0 ? (
         <div
           style={{
             gap: 16,
