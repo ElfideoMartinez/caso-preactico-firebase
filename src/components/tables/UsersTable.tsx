@@ -1,11 +1,11 @@
-import { useEffect } from "react";
 import Text from "../typography/Text";
 import DataTable from "react-data-table-component";
-import { typography } from "../../constants/typography";
 import Select from "../inputs/Select";
 import { updateProfile } from "../../services/firebase/users/updateProfile";
+import { colors } from "../../constants/colors";
 
 const UsersTable = ({
+  searchTerm,
   users,
 }: {
   searchTerm: string;
@@ -16,9 +16,6 @@ const UsersTable = ({
     role: string;
   }>;
 }) => {
-  useEffect(() => {
-    document.title = "Usuarios - Comercializadora Nova";
-  }, []);
   const handleUpdate = async (uid: string, field: string, value: string) => {
     try {
       await updateProfile({ uid, [field]: value });
@@ -26,12 +23,49 @@ const UsersTable = ({
       console.error("Error updating user:", error);
     }
   };
-  if (users.length === 0) {
-    return <Text size={typography.h1}>No se encontraron usuarios.</Text>;
+  const term = searchTerm.trim().toLowerCase();
+  const filteredUsers = term
+    ? users.filter(
+        (user) =>
+          user.displayName?.toLowerCase().includes(term) ||
+          user.email?.toLowerCase().includes(term) ||
+          user.role?.toLowerCase().includes(term),
+      )
+    : users;
+  const customStyles = {
+    headRow: {
+      style: {
+        background: colors.surfaceHover,
+        borderBottomColor: colors.border,
+      },
+    },
+    headCells: {
+      style: {
+        color: colors.text,
+        fontWeight: 700,
+        fontSize: 14,
+      },
+    },
+    rows: {
+      style: {
+        minHeight: 64,
+        color: colors.text,
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: colors.backgroundColor,
+        borderTopColor: colors.border,
+      },
+    },
+  };
+  if (filteredUsers.length === 0) {
+    return (
+      <Text color={colors.textSecondary}>No se encontraron usuarios.</Text>
+    );
   }
   return (
     <DataTable
-      title='Usuarios'
       columns={[
         {
           name: "Nombre",
@@ -45,7 +79,7 @@ const UsersTable = ({
         },
         {
           name: "Rol",
-          selector: (row) => (
+          cell: (row) => (
             <Select
               initialValue={row.role}
               options={[
@@ -60,10 +94,11 @@ const UsersTable = ({
           sortable: true,
         },
       ]}
-      data={users}
+      data={filteredUsers}
       pagination
       highlightOnHover
       pointerOnHover
+      customStyles={customStyles}
     />
   );
 };

@@ -7,10 +7,14 @@ import Button from "../buttons/Button";
 import { register, resetPassword } from "../../services/firebase/authServices";
 import { useState } from "react";
 import { addNewUser } from "../../services/firebase/users";
+import { colors } from "../../constants/colors";
+import { spacing } from "../../constants/spacing";
+import Swal from "sweetalert2";
 
 interface AddNewUserModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
+  onUserAdded?: () => void | Promise<void>;
 }
 const generateRandomPassword = () => {
   const chars =
@@ -22,13 +26,20 @@ const generateRandomPassword = () => {
   return password;
 };
 
-const AddNewUserModal = ({ isOpen, onRequestClose }: AddNewUserModalProps) => {
+const AddNewUserModal = ({
+  isOpen,
+  onRequestClose,
+  onUserAdded,
+}: AddNewUserModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     role: "",
   });
+  const isValid = Boolean(
+    formData.name.trim() && formData.email.trim() && formData.role,
+  );
   const handleAddNewUser = async () => {
     try {
       const newPassword = generateRandomPassword();
@@ -44,8 +55,23 @@ const AddNewUserModal = ({ isOpen, onRequestClose }: AddNewUserModalProps) => {
       if (formData.email) {
         await resetPassword(formData.email);
       }
+      await onUserAdded?.();
+      setFormData({ name: "", email: "", role: "" });
+      onRequestClose();
+      Swal.fire({
+        icon: "success",
+        title: "Usuario agregado",
+        text: "Se envió un correo para establecer la contraseña.",
+        confirmButtonColor: colors.primary,
+      });
     } catch (error) {
       console.error("Error al agregar nuevo usuario:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo agregar el usuario. Inténtalo de nuevo.",
+        confirmButtonColor: colors.danger,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -53,19 +79,43 @@ const AddNewUserModal = ({ isOpen, onRequestClose }: AddNewUserModalProps) => {
 
   return (
     <Modal
+      ariaHideApp={false}
       style={{
-        overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+        overlay: {
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        },
         content: {
-          inset: "20% 30%",
+          inset: "auto",
+          position: "relative",
+          maxWidth: 440,
+          width: "90%",
+          maxHeight: "max-content",
+          borderRadius: 16,
+          border: `1px solid ${colors.border}`,
+          background: colors.surface,
+          padding: 24,
           display: "flex",
           flexDirection: "column",
-          gap: "20px",
+          gap: spacing.md,
+          boxShadow: `0 10px 30px ${colors.shadow}`,
         },
       }}
       isOpen={isOpen}
       onRequestClose={onRequestClose}
     >
-      <Text size={typography.h1}>Agregar nuevo usuario</Text>
+      <div
+        style={{ display: "flex", flexDirection: "column", gap: spacing.xs }}
+      >
+        <Text size={typography.h2} weight={700}>
+          Agregar nuevo usuario
+        </Text>
+        <Text size={typography.small} color={colors.textSecondary}>
+          Se enviará un correo para que el usuario establezca su contraseña.
+        </Text>
+      </div>
       <Input
         type='text'
         placeholder='Nombre completo'
@@ -85,9 +135,25 @@ const AddNewUserModal = ({ isOpen, onRequestClose }: AddNewUserModalProps) => {
         ]}
         onChange={(value) => setFormData({ ...formData, role: value })}
       />
-      <Button disabled={isLoading} onClick={handleAddNewUser}>
-        <Text>{isLoading ? "Cargando..." : "Agregar usuario"}</Text>
-      </Button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          gap: spacing.sm,
+          marginTop: spacing.sm,
+        }}
+      >
+        <Button
+          variant='lightButtonVariant'
+          disabled={isLoading}
+          onClick={onRequestClose}
+        >
+          Cancelar
+        </Button>
+        <Button disabled={isLoading || !isValid} onClick={handleAddNewUser}>
+          {isLoading ? "Cargando..." : "Agregar usuario"}
+        </Button>
+      </div>
     </Modal>
   );
 };

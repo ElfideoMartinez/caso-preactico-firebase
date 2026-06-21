@@ -1,4 +1,3 @@
-import { spacing } from "../../constants/spacing";
 import { colors } from "../../constants/colors";
 
 interface SearchProps {
@@ -13,15 +12,19 @@ const Search = ({ searchTerm, setSearchTerm }: SearchProps) => {
   return (
     <input
       type='text'
-      placeholder='Search...'
+      placeholder='Buscar usuario...'
       value={searchTerm}
       onChange={handleSearch}
       style={{
-        marginTop: spacing.lg,
-        maxWidth: 400,
-        padding: spacing.sm,
-        borderRadius: spacing.sm,
+        width: "100%",
+        maxWidth: 360,
+        padding: "10px 14px",
+        borderRadius: 10,
         border: `1px solid ${colors.border}`,
+        backgroundColor: colors.surface,
+        color: colors.text,
+        outline: "none",
+        fontSize: 15,
       }}
     />
   );

@@ -29,11 +29,15 @@ const Select = ({ options, onChange, initialValue }: SelectProps) => {
   return (
     <select
       style={{
+        width: "100%",
         fontSize: typography.body,
-        color: colors.textSecondary,
-        padding: spacing.md,
-        borderRadius: spacing.sm,
-        border: "none",
+        color: colors.text,
+        padding: "10px 14px",
+        borderRadius: 10,
+        border: `1px solid ${colors.border}`,
+        backgroundColor: colors.surface,
+        cursor: "pointer",
+        outline: "none",
       }}
       onChange={async (e) => {
         setIsLoading(true);
