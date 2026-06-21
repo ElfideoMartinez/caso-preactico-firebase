@@ -73,7 +73,7 @@ function ProductCard({
   }, [imageUrl]);
 
   return (
-    <Card style={{ minWidth: 300 }}>
+    <Card style={{ maxWidth: 400 }}>
       <div
         style={{
           display: "flex",
@@ -129,8 +129,16 @@ function ProductCard({
           <Text size={typography.h3} weight={700}>
             {name}
           </Text>
-
-          <Text color={colors.textSecondary}>{description}</Text>
+          <Text
+            style={{
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+            }}
+            color={colors.textSecondary}
+          >
+            {description}
+          </Text>
         </div>
 
         <div

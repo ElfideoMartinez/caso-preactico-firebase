@@ -8,7 +8,10 @@ import { useCart } from "../../contexts/CartContext";
 import Button from "../buttons/Button";
 import Swal from "sweetalert2";
 import type { ButtonVariant } from "../buttons/Button";
-import { updateOrderStatusRTDB } from "../../services/firebase/realtimeDataBase";
+import {
+  updateOrderStatusRTDB,
+  requestOrderCancellationRTDB,
+} from "../../services/firebase/realtimeDataBase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
@@ -24,9 +27,13 @@ const statusStyles: {
   pending: {
     bg: colors.warningLight,
     color: colors.warning,
-    label: "Pendiente",
+    label: "Orden recibida",
   },
-  active: { bg: colors.successLight, color: colors.success, label: "Activa" },
+  active: {
+    bg: colors.successLight,
+    color: colors.success,
+    label: "En preparación / En camino",
+  },
   cancelled: {
     bg: colors.dangerLight,
     color: colors.danger,
@@ -35,7 +42,7 @@ const statusStyles: {
   completed: {
     bg: colors.surfaceHover,
     color: colors.primary,
-    label: "Completada",
+    label: "Entregada",
   },
 };
 
@@ -71,19 +78,40 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
                       gap: spacing.xs,
                     }}
                   >
-                    <span
+                    <div
                       style={{
-                        alignSelf: "flex-start",
-                        background: badge.bg,
-                        color: badge.color,
-                        padding: "4px 12px",
-                        borderRadius: 999,
-                        fontSize: typography.small,
-                        fontWeight: 700,
+                        display: "flex",
+                        gap: spacing.sm,
+                        flexWrap: "wrap",
                       }}
                     >
-                      {badge.label}
-                    </span>
+                      <span
+                        style={{
+                          background: badge.bg,
+                          color: badge.color,
+                          padding: "4px 12px",
+                          borderRadius: 999,
+                          fontSize: typography.small,
+                          fontWeight: 700,
+                        }}
+                      >
+                        {badge.label}
+                      </span>
+                      {item.cancelRequested && item.status !== "cancelled" && (
+                        <span
+                          style={{
+                            background: colors.warningLight,
+                            color: colors.warning,
+                            padding: "4px 12px",
+                            borderRadius: 999,
+                            fontSize: typography.small,
+                            fontWeight: 700,
+                          }}
+                        >
+                          Cancelación solicitada
+                        </span>
+                      )}
+                    </div>
                     <Text size={typography.small} color={colors.textSecondary}>
                       {new Date(item.timestamp).toLocaleString()}
                     </Text>
@@ -212,9 +240,12 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
                     </div>
                   )}
                 </div>
-                {role === "admin" && (
-                  <AdminOrdersBody orderId={item.id} status={item.status} />
-                )}
+                <OrderActions
+                  orderId={item.id}
+                  status={item.status}
+                  role={role}
+                  cancelRequested={item.cancelRequested}
+                />
               </OrderCard>
             );
           })}
@@ -224,112 +255,154 @@ const OrdersBody = ({ orders }: OrdersBodyProps) => {
   );
 };
 type OrderStatus = "pending" | "active" | "cancelled" | "completed";
-interface AdminOrdersBodyProps {
-  orderId: any;
+interface OrderActionsProps {
+  orderId: string;
   status?: OrderStatus;
+  role?: string;
+  cancelRequested?: boolean;
 }
-const AdminOrdersBody = ({
+
+const confirmCancel = async () => {
+  const result = await Swal.fire({
+    title: "¿Cancelar orden?",
+    text: "Esta acción no se puede deshacer.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, cancelar",
+    cancelButtonText: "No",
+    confirmButtonColor: colors.danger,
+    cancelButtonColor: colors.textSecondary,
+  });
+  return result.isConfirmed;
+};
+
+const OrderActions = ({
   orderId,
   status = "pending",
-}: AdminOrdersBodyProps) => {
-  const statusColors: { [key in OrderStatus]: ButtonVariant } = {
-    pending: "primaryButton",
-    active: "lightButtonVariant",
-    cancelled: "warningLightButton",
-    completed: "dangerLightButton",
-  };
-  const statusActions: { [key in OrderStatus]: any[] } = {
-    pending: [
-      {
-        label: "Marcar como Activa",
-        color: statusColors[status as OrderStatus],
-        icon: "check",
-        function: async () => {
-          await updateOrderStatusRTDB(orderId, "active");
-          await addRemoveInventory(orderId, "decrement");
-          Swal.fire(
-            "Exito",
-            `La orden ${orderId} ha sido marcada como activa exitosamente.`,
-            "success",
-          );
-        },
-      },
-    ],
-    active: [
-      {
-        label: "Cancelar Orden",
-        color: statusColors["cancelled"],
-        icon: "times",
-        function: async () => {
-          await updateOrderStatusRTDB(orderId, "cancelled");
-          await addRemoveInventory(orderId, "increment");
-          await Swal.fire(
-            "Exito",
-            `La orden ${orderId} ha sido cancelada exitosamente.`,
-            "success",
-          );
-        },
-      },
-      {
-        label: "Marcar como Realizada",
-        color: statusColors["pending"],
-        icon: "check",
-        function: async () => {
-          await updateOrderStatusRTDB(orderId, "completed");
-          Swal.fire(
-            "Exito",
-            `La orden ${orderId} ha sido marcada como completada exitosamente.`,
-            "success",
-          );
-        },
-      },
-    ],
-    cancelled: [
-      {
-        label: "Cancelar Orden",
-        color: statusColors["cancelled"],
-        icon: "times",
-        function: async () => {
-          await updateOrderStatusRTDB(orderId, "cancelled");
-          Swal.fire(
-            "Exito",
-            `La orden ${orderId} ha sido cancelada exitosamente.`,
-            "success",
-          );
-        },
-      },
-    ],
-    completed: [
-      {
-        label: "Realizar Devolución",
-        color: statusColors["cancelled"],
-        icon: "check",
-        function: async () => {
-          await updateOrderStatusRTDB(orderId, "cancelled");
-          await Swal.fire(
-            "Exito",
-            `La orden ${orderId} ha sido cancelada exitosamente.`,
-            "success",
-          );
-        },
-      },
-    ],
+  role,
+  cancelRequested,
+}: OrderActionsProps) => {
+  const isAdmin = role === "admin";
+
+  const cancelOrder = async (restore: boolean) => {
+    if (!(await confirmCancel())) return;
+    await updateOrderStatusRTDB(orderId, "cancelled");
+    if (restore) {
+      await addRemoveInventory(orderId, "increment");
+    }
+    Swal.fire("Orden cancelada", "La orden ha sido cancelada.", "success");
   };
 
+  const markActive = async () => {
+    await updateOrderStatusRTDB(orderId, "active");
+    await addRemoveInventory(orderId, "decrement");
+    Swal.fire("Orden activada", "La orden está en preparación.", "success");
+  };
+
+  const markDelivered = async () => {
+    await updateOrderStatusRTDB(orderId, "completed");
+    Swal.fire("Orden entregada", "La orden ha sido entregada.", "success");
+  };
+
+  const requestCancellation = async () => {
+    const result = await Swal.fire({
+      title: "¿Solicitar cancelación?",
+      text: "Un administrador revisará tu solicitud.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Solicitar",
+      cancelButtonText: "No",
+      confirmButtonColor: colors.primary,
+      cancelButtonColor: colors.textSecondary,
+    });
+    if (!result.isConfirmed) return;
+    await requestOrderCancellationRTDB(orderId);
+    Swal.fire(
+      "Solicitud enviada",
+      "Tu solicitud de cancelación fue enviada.",
+      "success",
+    );
+  };
+
+  const actions: {
+    label: string;
+    variant: ButtonVariant;
+    onClick: () => Promise<void>;
+  }[] = [];
+
+  if (isAdmin) {
+    if (status === "pending") {
+      actions.push({
+        label: "Marcar como activa",
+        variant: "primaryButton",
+        onClick: markActive,
+      });
+      actions.push({
+        label: "Cancelar orden",
+        variant: "dangerLightButton",
+        onClick: () => cancelOrder(false),
+      });
+    } else if (status === "active") {
+      actions.push({
+        label: "Marcar como entregada",
+        variant: "primaryButton",
+        onClick: markDelivered,
+      });
+      actions.push({
+        label: "Cancelar orden",
+        variant: "dangerLightButton",
+        onClick: () => cancelOrder(true),
+      });
+    } else if (status === "completed") {
+      actions.push({
+        label: "Cancelar orden",
+        variant: "dangerLightButton",
+        onClick: () => cancelOrder(true),
+      });
+    }
+  } else {
+    if (status === "pending") {
+      actions.push({
+        label: "Cancelar orden",
+        variant: "dangerLightButton",
+        onClick: () => cancelOrder(false),
+      });
+    } else if (status === "completed" && !cancelRequested) {
+      actions.push({
+        label: "Solicitar cancelación",
+        variant: "lightButtonVariant",
+        onClick: requestCancellation,
+      });
+    }
+  }
+
+  const containerStyle = {
+    display: "flex",
+    justifyContent: "flex-end",
+    gap: spacing.md,
+    marginTop: spacing.md,
+    borderTop: `1px solid ${colors.border}`,
+    paddingTop: spacing.md,
+  };
+
+  if (!isAdmin && status === "completed" && cancelRequested) {
+    return (
+      <div style={containerStyle}>
+        <Text size={typography.small} color={colors.textSecondary}>
+          Cancelación solicitada
+        </Text>
+      </div>
+    );
+  }
+
+  if (actions.length === 0) {
+    return null;
+  }
+
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "flex-end",
-        gap: spacing.lg,
-        marginRight: spacing.lg,
-        marginTop: spacing.lg,
-        borderTop: `1px solid ${colors.border}`,
-        padding: spacing.lg,
-      }}
-    >
-      {statusActions[status as OrderStatus]?.map((action, index) => (
-        <Button variant={action.color} key={index} onClick={action.function}>
+    <div style={containerStyle}>
+      {actions.map((action, index) => (
+        <Button variant={action.variant} key={index} onClick={action.onClick}>
           {action.label}
         </Button>
       ))}

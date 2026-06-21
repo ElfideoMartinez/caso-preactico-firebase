@@ -29,6 +29,15 @@ export const updateOrderStatusRTDB = async (
   }
 };
 
+export const requestOrderCancellationRTDB = async (orderId: string) => {
+  try {
+    const orderRef = ref(rtdb, `orders/${orderId}`);
+    await update(orderRef, { cancelRequested: true });
+  } catch (error) {
+    console.error("Error requesting order cancellation: ", error);
+  }
+};
+
 export const getUserOrdersRTDB = (
   userId: string,
   userRole: string,
