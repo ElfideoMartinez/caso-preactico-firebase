@@ -4,9 +4,15 @@ import Input from "../inputs/Input";
 import { editProduct } from "../../services/firebase/products/EditProduct";
 import { colors } from "../../constants/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faImage, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import { removeFromInventory } from "../../services/firebase/products/removeFromInventory";
+import {
+  getStorageRef,
+  uploadFile,
+} from "../../services/firebase/storage/storageService";
+import { useImageCache } from "../../contexts/ImageCacheContext";
+import { ClipLoader } from "react-spinners";
 import { useState } from "react";
 
 export interface Product {
@@ -20,11 +26,16 @@ export interface Product {
 const ProductsTable = ({
   products,
   setProducts,
+  refreshProducts,
+  searchTerm = "",
 }: {
   products: Product[];
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+  refreshProducts?: () => Promise<void>;
+  searchTerm?: string;
 }) => {
   const [loadingInputs, setLoadingInputs] = useState<string[]>([]);
+  const { seedUrl } = useImageCache();
   const handleInputChangeFunction = (
     e: React.ChangeEvent<HTMLInputElement>,
     row: Product,
@@ -59,6 +70,47 @@ const ProductsTable = ({
       setLoadingInputs((prev) => prev.filter((key) => key !== loadingKey));
     }
   };
+  const handleImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    row: Product,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const loadingKey = `${row.id}-image`;
+    try {
+      setLoadingInputs((prev) => [...prev, loadingKey]);
+      const fileName = file.name.replace(/\s+/g, "_");
+      const newFile = new File([file], fileName, { type: file.type });
+      const storageRef = getStorageRef(`/products/${newFile.name}`);
+      const uploaded = await uploadFile(newFile, storageRef.fullPath);
+      seedUrl(
+        `${import.meta.env.VITE_FIREBASE_STORAGE_PRODUCTS_URL}${
+          uploaded.metadata.fullPath
+        }`,
+        URL.createObjectURL(newFile),
+      );
+      await editProduct(row.id, "imageUrl", uploaded.metadata.fullPath);
+      await refreshProducts?.();
+      Swal.fire({
+        title: "Imagen actualizada",
+        text: `Se actualizó la imagen de "${row.name}".`,
+        icon: "success",
+        confirmButtonColor: colors.primary,
+      });
+    } catch (error) {
+      console.error("Error al actualizar imagen: ", error);
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo actualizar la imagen. Inténtalo de nuevo.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: colors.danger,
+      });
+    } finally {
+      setLoadingInputs((prev) => prev.filter((key) => key !== loadingKey));
+      e.target.value = "";
+    }
+  };
   const handleDelete = async (row: Product) => {
     try {
       await removeFromInventory(row.uid);
@@ -83,6 +135,16 @@ const ProductsTable = ({
         confirmButtonColor: colors.danger,
       });
     }
+  };
+  const iconButtonStyle = {
+    border: "none",
+    background: "transparent",
+    cursor: "pointer",
+    fontSize: 16,
+    padding: 8,
+    borderRadius: 8,
+    display: "inline-flex",
+    alignItems: "center",
   };
   const columns: TableColumn<Product>[] = [
     {
@@ -145,21 +207,34 @@ const ProductsTable = ({
       ),
     },
     {
+      name: "Imagen",
+      width: "90px",
+      cell: (row: Product) =>
+        loadingInputs.includes(`${row.id}-image`) ? (
+          <ClipLoader color={colors.primary} size={20} />
+        ) : (
+          <label
+            aria-label='Cambiar imagen'
+            style={{ ...iconButtonStyle, color: colors.primary }}
+          >
+            <FontAwesomeIcon icon={faImage} />
+            <input
+              type='file'
+              accept='image/*'
+              hidden
+              onChange={(e) => handleImageChange(e, row)}
+            />
+          </label>
+        ),
+    },
+    {
       name: "Borrar",
       width: "72px",
       cell: (row: Product) => (
         <button
           aria-label='Eliminar producto'
           onClick={() => handleDelete(row)}
-          style={{
-            border: "none",
-            background: "transparent",
-            color: colors.danger,
-            cursor: "pointer",
-            fontSize: 16,
-            padding: 8,
-            borderRadius: 8,
-          }}
+          style={{ ...iconButtonStyle, color: colors.danger }}
         >
           <FontAwesomeIcon icon={faTrash} />
         </button>
@@ -198,10 +273,19 @@ const ProductsTable = ({
       <Text color={colors.textSecondary}>No hay productos disponibles.</Text>
     );
   }
+  const term = searchTerm.trim().toLowerCase();
+  const filteredProducts = term
+    ? products.filter((product) => product.name?.toLowerCase().includes(term))
+    : products;
+  if (filteredProducts.length === 0) {
+    return (
+      <Text color={colors.textSecondary}>No se encontraron productos.</Text>
+    );
+  }
   return (
     <DataTable
       columns={columns}
-      data={products}
+      data={filteredProducts}
       pagination
       customStyles={customStyles}
       highlightOnHover

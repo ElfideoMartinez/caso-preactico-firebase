@@ -16,9 +16,9 @@ const seriesColors = [
   colors.danger,
   colors.secondary,
   colors.primaryLight,
-  "#4C7BD9",
-  "#8E6CC9",
-  "#E08A3C",
+  colors.warningLight,
+  colors.dangerLight,
+  colors.successLight,
 ];
 
 const getDateKey = (order: any) => {

@@ -5,6 +5,7 @@ interface Product {
   price: number;
   stock: number;
   uid: string;
+  imageUrl?: string;
 }
 export const editProduct = async (
   id: string,

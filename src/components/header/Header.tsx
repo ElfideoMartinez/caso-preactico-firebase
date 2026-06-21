@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { colors } from "../../constants/colors";
 import UserMenu from "../userMenu/UserMenu";
 
@@ -6,6 +7,7 @@ type HeaderProps = {
 };
 
 function Header({ onToggleSidebar }: HeaderProps) {
+  const navigate = useNavigate();
   return (
     <header
       style={{
@@ -30,7 +32,9 @@ function Header({ onToggleSidebar }: HeaderProps) {
         </button>
 
         <h2
+          onClick={() => navigate("/productos")}
           style={{
+            cursor: "pointer",
             color: colors.secondary,
           }}
         >

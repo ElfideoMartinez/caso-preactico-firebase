@@ -76,7 +76,11 @@ const Users = () => {
           Agregar nuevo usuario
         </Button>
       </div>
-      <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <Search
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        placeholder='Buscar usuario...'
+      />
       {loading ? (
         <Loader />
       ) : (

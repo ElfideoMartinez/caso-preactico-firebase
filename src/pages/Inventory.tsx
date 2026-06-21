@@ -7,10 +7,12 @@ import Button from "../components/buttons/Button";
 import AddNewProductModal from "../components/modals/AddNewProductModal";
 import { useProducts } from "../contexts/ProductsContext";
 import Loader from "../components/loaders/Loader";
+import Search from "../components/inputs/search";
 
 const Inventory = () => {
   const { products, loading, refreshProducts, setProducts } = useProducts();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
     document.title = "Inventario - Comercializadora Nova";
   }, []);
@@ -33,10 +35,20 @@ const Inventory = () => {
         </Text>
         <Button onClick={() => setIsModalOpen(true)}>Agregar Producto</Button>
       </div>
+      <Search
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        placeholder='Buscar producto...'
+      />
       {loading ? (
         <Loader />
       ) : (
-        <ProductsTable products={products} setProducts={setProducts} />
+        <ProductsTable
+          products={products}
+          setProducts={setProducts}
+          refreshProducts={refreshProducts}
+          searchTerm={searchTerm}
+        />
       )}
     </Card>
   );

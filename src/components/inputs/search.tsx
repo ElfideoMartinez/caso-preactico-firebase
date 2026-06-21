@@ -3,16 +3,21 @@ import { colors } from "../../constants/colors";
 interface SearchProps {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
+  placeholder?: string;
 }
 
-const Search = ({ searchTerm, setSearchTerm }: SearchProps) => {
+const Search = ({
+  searchTerm,
+  setSearchTerm,
+  placeholder = "Buscar...",
+}: SearchProps) => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
   return (
     <input
       type='text'
-      placeholder='Buscar usuario...'
+      placeholder={placeholder}
       value={searchTerm}
       onChange={handleSearch}
       style={{
