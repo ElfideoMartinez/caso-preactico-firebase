@@ -29,7 +29,7 @@ function ProductCard({
 }: ProductCardProps) {
   const { user } = useAuth();
   const { addItem } = useCart();
-  const getCachedUrl = useImageCache();
+  const { getCachedUrl } = useImageCache();
   const onSale = salePrice !== undefined && salePrice < price;
   const [isLoading, setIsLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState(imageUrl);

@@ -1,20 +1,13 @@
-import { useEffect, useState } from "react";
-import { getProducts } from "../services/firebase/products";
+import { useEffect } from "react";
 import ProductCard from "../components/cards/ProductCard";
 import Text from "../components/typography/Text";
 import { typography } from "../constants/typography";
+import { useProducts } from "../contexts/ProductsContext";
 
 const Products = () => {
-  const [products, setProducts] = useState<Array<any>>([]);
+  const { products } = useProducts();
   useEffect(() => {
     document.title = "Productos - Innovate Solutions";
-  }, []);
-  const fetchProducts = async () => {
-    const response = await getProducts();
-    setProducts(response);
-  };
-  useEffect(() => {
-    fetchProducts();
   }, []);
   return (
     <>

@@ -11,6 +11,7 @@ import {
   getStorageRef,
   uploadFile,
 } from "../../services/firebase/storage/storageService";
+import { useImageCache } from "../../contexts/ImageCacheContext";
 
 interface AddNewProductModalProps {
   isOpen: boolean;
@@ -31,6 +32,7 @@ const AddNewProductModal = ({
     imageUrl: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const { seedUrl } = useImageCache();
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
@@ -76,6 +78,12 @@ const AddNewProductModal = ({
             handleImageUpload={async (file) => {
               const storageRef = getStorageRef(`/products/${file.name}`);
               const imageUrl = await uploadFile(file, storageRef.fullPath);
+              seedUrl(
+                `${import.meta.env.VITE_FIREBASE_STORAGE_PRODUCTS_URL}${
+                  imageUrl.metadata.fullPath
+                }`,
+                URL.createObjectURL(file),
+              );
               setFormData({
                 ...formData,
                 imageUrl: imageUrl.metadata.fullPath,

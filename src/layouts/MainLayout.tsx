@@ -2,12 +2,13 @@ import { useState } from "react";
 import Header from "../components/header/Header";
 import Sidebar from "../components/sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
+import { ProductsProvider } from "../contexts/ProductsContext";
 
 function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <>
+    <ProductsProvider>
       <Header onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
       <div
@@ -27,7 +28,7 @@ function MainLayout() {
           <Outlet />
         </main>
       </div>
-    </>
+    </ProductsProvider>
   );
 }
 

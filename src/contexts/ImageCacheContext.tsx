@@ -2,11 +2,15 @@ import { createContext, useContext, useRef } from "react";
 import { getDownloadURL } from "firebase/storage";
 import { getStorageRef } from "../services/firebase/storage/storageService";
 
-type GetCachedUrl = (path: string) => Promise<string>;
+type ImageCacheContextType = {
+  getCachedUrl: (path: string) => Promise<string>;
+  seedUrl: (path: string, url: string) => void;
+};
 
-const ImageCacheContext = createContext<GetCachedUrl>((path) =>
-  getDownloadURL(getStorageRef(path)),
-);
+const ImageCacheContext = createContext<ImageCacheContextType>({
+  getCachedUrl: (path) => getDownloadURL(getStorageRef(path)),
+  seedUrl: () => {},
+});
 
 export function ImageCacheProvider({
   children,
@@ -15,7 +19,7 @@ export function ImageCacheProvider({
 }) {
   const cache = useRef<Map<string, Promise<string>>>(new Map());
 
-  const getCachedUrl: GetCachedUrl = (path) => {
+  const getCachedUrl = (path: string) => {
     const existing = cache.current.get(path);
     if (existing) return existing;
     const promise = getDownloadURL(getStorageRef(path)).catch((error) => {
@@ -26,8 +30,14 @@ export function ImageCacheProvider({
     return promise;
   };
 
+  const seedUrl = (path: string, url: string) => {
+    if (!cache.current.has(path)) {
+      cache.current.set(path, Promise.resolve(url));
+    }
+  };
+
   return (
-    <ImageCacheContext.Provider value={getCachedUrl}>
+    <ImageCacheContext.Provider value={{ getCachedUrl, seedUrl }}>
       {children}
     </ImageCacheContext.Provider>
   );

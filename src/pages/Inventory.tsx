@@ -1,27 +1,17 @@
 import { useEffect, useState } from "react";
 import Card from "../components/cards/Card";
-import ProductsTable, {
-  type Product,
-} from "../components/tables/ProductsTable";
+import ProductsTable from "../components/tables/ProductsTable";
 import Text from "../components/typography/Text";
 import { typography } from "../constants/typography";
-import { getProducts } from "../services/firebase/products";
 import Button from "../components/buttons/Button";
 import AddNewProductModal from "../components/modals/AddNewProductModal";
+import { useProducts } from "../contexts/ProductsContext";
 
 const Inventory = () => {
-  const [data, setData] = useState<Product[]>([]);
+  const { products, refreshProducts, setProducts } = useProducts();
   const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     document.title = "Inventario - Innovate Solutions";
-  }, []);
-
-  const fetchData = async () => {
-    const response = await getProducts();
-    setData(response);
-  };
-  useEffect(() => {
-    fetchData();
   }, []);
   return (
     <Card style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -35,14 +25,14 @@ const Inventory = () => {
         <AddNewProductModal
           isOpen={isModalOpen}
           setIsOpen={setIsModalOpen}
-          refreshData={fetchData}
+          refreshData={refreshProducts}
         />
         <Text size={typography.h1} weight={700}>
           Inventario
         </Text>
         <Button onClick={() => setIsModalOpen(true)}>Agregar Producto</Button>
       </div>
-      <ProductsTable products={data} setProducts={setData} />
+      <ProductsTable products={products} setProducts={setProducts} />
     </Card>
   );
 };
