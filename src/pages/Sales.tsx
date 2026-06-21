@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Chart, type AxisOptions } from "react-charts";
+import DataTable, { type TableColumn } from "react-data-table-component";
 import Card from "../components/cards/Card";
 import Text from "../components/typography/Text";
 import { typography } from "../constants/typography";
@@ -150,11 +151,54 @@ const Sales = () => {
     [],
   );
 
-  const rowStyle = {
-    display: "grid",
-    gridTemplateColumns: "2fr 1fr 1fr",
-    gap: spacing.md,
-    padding: spacing.sm,
+  const columns: TableColumn<{
+    name: string;
+    quantity: number;
+    amount: number;
+  }>[] = [
+    {
+      name: "Producto",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Cantidad vendida",
+      selector: (row) => row.quantity,
+      sortable: true,
+    },
+    {
+      name: "Monto",
+      selector: (row) => row.amount,
+      format: (row) => `$${row.amount.toFixed(2)}`,
+      sortable: true,
+    },
+  ];
+  const customStyles = {
+    headRow: {
+      style: {
+        background: colors.surfaceHover,
+        borderBottomColor: colors.border,
+      },
+    },
+    headCells: {
+      style: {
+        color: colors.text,
+        fontWeight: 700,
+        fontSize: 14,
+      },
+    },
+    rows: {
+      style: {
+        minHeight: 64,
+        color: colors.text,
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: colors.backgroundColor,
+        borderTopColor: colors.border,
+      },
+    },
   };
 
   return (
@@ -165,34 +209,25 @@ const Sales = () => {
         </Text>
         {loading ? (
           <Loader />
+        ) : items.length === 0 ? (
+          <Text color={colors.textSecondary}>No hay ventas todavía.</Text>
         ) : (
           <>
+            <DataTable
+              columns={columns}
+              data={items}
+              pagination
+              customStyles={customStyles}
+              highlightOnHover
+            />
             <div
               style={{
-                ...rowStyle,
-                borderBottom: `1px solid ${colors.border}`,
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: spacing.sm,
               }}
             >
-              <Text weight={700}>Producto</Text>
-              <Text weight={700}>Cantidad vendida</Text>
-              <Text weight={700}>Monto</Text>
-            </div>
-            {items.length === 0 ? (
-              <Text color={colors.textSecondary}>No hay ventas todavía.</Text>
-            ) : (
-              items.map((item, index) => (
-                <div key={index} style={rowStyle}>
-                  <Text>{item.name}</Text>
-                  <Text>{item.quantity}</Text>
-                  <Text>${item.amount.toFixed(2)}</Text>
-                </div>
-              ))
-            )}
-            <div
-              style={{ ...rowStyle, borderTop: `1px solid ${colors.border}` }}
-            >
-              <Text weight={700}>Total de ventas</Text>
-              <span />
+              <Text weight={700}>Total de ventas:</Text>
               <Text weight={700}>${totalSales.toFixed(2)}</Text>
             </div>
           </>
