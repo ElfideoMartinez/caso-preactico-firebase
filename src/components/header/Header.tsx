@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../constants/colors";
 import UserMenu from "../userMenu/UserMenu";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Button from "../buttons/Button";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 type HeaderProps = {
   onToggleSidebar: () => void;
@@ -27,9 +30,9 @@ function Header({ onToggleSidebar }: HeaderProps) {
           gap: 16,
         }}
       >
-        <button className='burger' onClick={onToggleSidebar}>
-          <span>☰</span>
-        </button>
+        <Button onClick={onToggleSidebar}>
+          <FontAwesomeIcon icon={faBars} size='1x' color='#fff' />
+        </Button>
 
         <h2
           onClick={() => navigate("/productos")}
